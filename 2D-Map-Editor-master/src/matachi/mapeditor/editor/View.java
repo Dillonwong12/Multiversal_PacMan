@@ -84,7 +84,7 @@ public class View {
 		loadButton.addActionListener(controller);
 		loadButton.setActionCommand("load");
 
-		Button startGameButton = new JButton("Start Game");
+		JButton startGameButton = new JButton("Start Game");
 		startGameButton.addActionListener(controller);
 		startGameButton.setActionCommand("start_game");
 
