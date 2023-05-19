@@ -1,4 +1,4 @@
-package matachi.mapeditor.editor;
+package src.editor.matachi.mapeditor.editor;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,11 +17,11 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import matachi.mapeditor.grid.Camera;
-import matachi.mapeditor.grid.Grid;
-import matachi.mapeditor.grid.GridCamera;
-import matachi.mapeditor.grid.GridModel;
-import matachi.mapeditor.grid.GridView;
+import src.editor.matachi.mapeditor.grid.Camera;
+import src.editor.matachi.mapeditor.grid.Grid;
+import src.editor.matachi.mapeditor.grid.GridCamera;
+import src.editor.matachi.mapeditor.grid.GridModel;
+import src.editor.matachi.mapeditor.grid.GridView;
 
 import org.jdom.Attribute;
 import org.jdom.Document;
@@ -65,7 +65,7 @@ public class Controller implements ActionListener, GUIInformation {
 	}
 
 	public void init(int width, int height) {
-		this.tiles = TileManager.getTilesFromFolder("data/");
+		this.tiles = TileManager.getTilesFromFolder("pacman/data/");
 		this.model = new GridModel(width, height, tiles.get(0).getCharacter());
 		this.camera = new GridCamera(model, Constants.GRID_WIDTH,
 				Constants.GRID_HEIGHT);

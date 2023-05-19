@@ -1,7 +1,7 @@
-package src;
+package src.game;
 
-import src.utility.GameCallback;
-import src.utility.PropertiesLoader;
+import src.game.utility.GameCallback;
+import src.game.utility.PropertiesLoader;
 
 import java.util.Properties;
 
