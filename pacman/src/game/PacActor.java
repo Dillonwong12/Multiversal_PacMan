@@ -1,51 +1,50 @@
+/**
+ * Subclass of Character. Defines the Character which is controlled by the player and must collect Items to win whilst
+ * avoiding Monsters.
+ */
 // PacActor.java
 // Used for PacMan
 package src.game;
 
-import ch.aplu.jgamegrid.*;
+import ch.aplu.jgamegrid.GGKeyRepeatListener;
+import ch.aplu.jgamegrid.Location;
+
+import java.awt.*;
 import java.awt.event.KeyEvent;
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
-public class PacActor extends Actor implements GGKeyRepeatListener
+public class PacActor extends Character implements GGKeyRepeatListener
 {
+  private static final String PAC_SPRITE = "sprites/pacpix.gif";
   private static final int nbSprites = 4;
   private int idSprite = 0;
   private int nbPills = 0;
   private int score = 0;
-  private Game game;
-  private ArrayList<Location> visitedList = new ArrayList<Location>();
+
   private List<String> propertyMoves = new ArrayList<>();
   private int propertyMoveIndex = 0;
-  private final int listLength = 10;
-  private int seed;
-  private Random randomiser = new Random();
-  public PacActor(Game game)
-  {
-    super(true, "sprites/pacpix.gif", nbSprites);  // Rotatable
-    this.game = game;
-  }
   private boolean isAuto = false;
 
-  public void setAuto(boolean auto) {
-    isAuto = auto;
+  public PacActor(Game game)
+  {
+    super(true, PAC_SPRITE, nbSprites, game);  // Rotatable
   }
 
-
-  public void setSeed(int seed) {
-    this.seed = seed;
-    randomiser.setSeed(seed);
-  }
-
+  /**
+   * Parses a `propertyMoveString` to store a list of moves in `propertyMoves`. Used for Auto Testing.
+   */
   public void setPropertyMoves(String propertyMoveString) {
     if (propertyMoveString != null) {
       this.propertyMoves = Arrays.asList(propertyMoveString.split(","));
     }
   }
 
+  /**
+   * Defines the movement of PacActor according to different `keyCode`s.
+   * @param keyCode The code for a keyboard input
+   */
   public void keyRepeated(int keyCode)
   {
     if (isAuto) {
@@ -76,10 +75,14 @@ public class PacActor extends Actor implements GGKeyRepeatListener
     if (next != null && canMove(next))
     {
       setLocation(next);
-      eatPill(next);
+      eatItem(next);
     }
   }
 
+  /**
+   * Updates `idSprite` and makes PacActor move automatically if `isAuto`
+   */
+  @Override
   public void act()
   {
     show(idSprite);
@@ -90,13 +93,17 @@ public class PacActor extends Actor implements GGKeyRepeatListener
     if (isAuto) {
       moveInAutoMode();
     }
-    this.game.getGameCallback().pacManLocationChanged(getLocation(), score, nbPills);
+    this.getGame().getGameCallback().pacManLocationChanged(getLocation(), score, nbPills);
   }
 
+  /**
+   * Finds and returns the Location closest
+   * @return currentLocation The Location closest to an Item
+   */
   private Location closestPillLocation() {
     int currentDistance = 1000;
     Location currentLocation = null;
-    List<Location> pillAndItemLocations = game.getPillAndItemLocations();
+    List<Location> pillAndItemLocations = this.getGame().getPillAndItemLocations();
     for (Location location: pillAndItemLocations) {
       int distanceToPill = location.getDistanceTo(getLocation());
       if (distanceToPill < currentDistance) {
@@ -104,10 +111,12 @@ public class PacActor extends Actor implements GGKeyRepeatListener
         currentDistance = distanceToPill;
       }
     }
-
     return currentLocation;
   }
 
+  /**
+   * Moves PacActor according to the moves specified in `propertyMoves`
+   */
   private void followPropertyMoves() {
     String currentMove = propertyMoves.get(propertyMoveIndex);
     switch(currentMove) {
@@ -121,13 +130,17 @@ public class PacActor extends Actor implements GGKeyRepeatListener
         Location next = getNextMoveLocation();
         if (canMove(next)) {
           setLocation(next);
-          eatPill(next);
+          eatItem(next);
         }
         break;
     }
     propertyMoveIndex++;
   }
 
+  /**
+   * First moves PacActor according to the moves specified in `propertyMoves`. Once there are no more moves to follow
+   * from `propertyMoves`, attempts to walk towards the next `closestPill`.
+   */
   private void moveInAutoMode() {
     if (propertyMoves.size() > propertyMoveIndex) {
       followPropertyMoves();
@@ -144,7 +157,7 @@ public class PacActor extends Actor implements GGKeyRepeatListener
       setLocation(next);
     } else {
       // normal movement
-      int sign = randomiser.nextDouble() < 0.5 ? 1 : -1;
+      int sign = this.getRandomiser().nextDouble() < 0.5 ? 1 : -1;
       setDirection(oldDirection);
       turn(sign * 90);  // Try to turn left/right
       next = getNextMoveLocation();
@@ -171,62 +184,56 @@ public class PacActor extends Actor implements GGKeyRepeatListener
         }
       }
     }
-    eatPill(next);
+    eatItem(next);
     addVisitedList(next);
   }
 
-  private void addVisitedList(Location location)
-  {
-    visitedList.add(location);
-    if (visitedList.size() == listLength)
-      visitedList.remove(0);
-  }
-
-  private boolean isVisited(Location location)
-  {
-    for (Location loc : visitedList)
-      if (loc.equals(location))
-        return true;
-    return false;
-  }
-
-  private boolean canMove(Location location)
+  /***
+   * PacActor eats an Item at the specified `location`. This removes the Item from the grid, increments `score` &
+   * `nbPills`, and applies Item effects if required.
+   * @param location The location of the Item being eaten
+   */
+  private void eatItem(Location location)
   {
     Color c = getBackground().getColor(location);
-    if ( c.equals(Color.gray) || location.getX() >= game.getNumHorzCells()
-            || location.getX() < 0 || location.getY() >= game.getNumVertCells() || location.getY() < 0)
-      return false;
-    else
-      return true;
+
+    if (c.equals(Portal.PORTAL_COLOR)){
+      for (Location loc: getGame().getItemLocations().keySet()) {
+        if (loc.equals(location)) {
+          Item item = getGame().getItemLocations().get(loc);
+          Portal p = (Portal)item;
+          p.teleport(this);
+        }
+      }
+    }
+
+    // Only Pills and Gold pieces increase `nbPills`
+    if (c.equals(Pill.PILL_COLOR) || c.equals(Gold.GOLD_COLOR)){
+      nbPills++;
+    }
+
+    if (!c.equals(Color.lightGray) && !c.equals(Portal.PORTAL_COLOR)){
+      getBackground().fillCell(location, Color.lightGray);
+      this.getGame().removeItem(location);
+    }
+
+    String title = "[PacMan in the Multiverse] Current score: " + score;
+    gameGrid.setTitle(title);
   }
 
   public int getNbPills() {
     return nbPills;
   }
 
-  private void eatPill(Location location)
-  {
-    Color c = getBackground().getColor(location);
-    if (c.equals(Color.white))
-    {
-      nbPills++;
-      score++;
-      getBackground().fillCell(location, Color.lightGray);
-      game.getGameCallback().pacManEatPillsAndItems(location, "pills");
-    } else if (c.equals(Color.yellow)) {
-      nbPills++;
-      score+= 5;
-      getBackground().fillCell(location, Color.lightGray);
-      game.getGameCallback().pacManEatPillsAndItems(location, "gold");
-      game.removeItem("gold",location);
-    } else if (c.equals(Color.blue)) {
-      getBackground().fillCell(location, Color.lightGray);
-      game.getGameCallback().pacManEatPillsAndItems(location, "ice");
-      game.removeItem("ice",location);
-    }
-    String title = "[PacMan in the Multiverse] Current score: " + score;
-    gameGrid.setTitle(title);
+  public int getScore(){
+    return score;
   }
 
+  public void setAuto(boolean auto) {
+    isAuto = auto;
+  }
 
+  public void setScore(int score){
+    this.score = score;
+  }
 }

@@ -1,50 +1,50 @@
 // Monster.java
 // Used for PacMan
+/**
+ * Subclass of Character. Monsters all move with different walkApproaches().
+ */
 package src.game;
 
-import ch.aplu.jgamegrid.*;
-import java.awt.Color;
-import java.util.*;
+import ch.aplu.jgamegrid.Location;
 
-public class Monster extends Actor
+import java.util.ArrayList;
+import java.util.Timer;
+import java.util.TimerTask;
+
+public abstract class Monster extends Character
 {
-  private Game game;
   private MonsterType type;
-  private ArrayList<Location> visitedList = new ArrayList<Location>();
-  private final int listLength = 10;
+  private static final int SECONDS_TO_MILLISECONDS = 1000;
   private boolean stopMoving = false;
-  private int seed = 0;
-  private Random randomiser = new Random(0);
+  private boolean isFurious = false;
 
-  public Monster(Game game, MonsterType type)
+  public Monster(String sprite, Game game, MonsterType type)
   {
-    super("sprites/" + type.getImageName());
-    this.game = game;
+    super(sprite, game);
     this.type = type;
   }
 
+  /**
+   * Causes a Monster to stop moving for a period of `seconds` by toggling `stopMoving`.
+   * @param seconds The duration to cease moving
+   */
   public void stopMoving(int seconds) {
     this.stopMoving = true;
-    Timer timer = new Timer(); // Instantiate Timer Object
-    int SECOND_TO_MILLISECONDS = 1000;
+    // Instantiate Timer Object
+    Timer timer = new Timer();
     final Monster monster = this;
     timer.schedule(new TimerTask() {
       @Override
       public void run() {
         monster.stopMoving = false;
       }
-    }, seconds * SECOND_TO_MILLISECONDS);
+    }, seconds * SECONDS_TO_MILLISECONDS);
   }
 
-  public void setSeed(int seed) {
-    this.seed = seed;
-    randomiser.setSeed(seed);
-  }
-
-  public void setStopMoving(boolean stopMoving) {
-    this.stopMoving = stopMoving;
-  }
-
+  /**
+   * Calls each Monster's walkApproach().
+   */
+  @Override
   public void act()
   {
     if (stopMoving) {
@@ -57,92 +57,119 @@ public class Monster extends Actor
       setHorzMirror(true);
   }
 
-  private void walkApproach()
-  {
-    Location pacLocation = game.pacActor.getLocation();
+  /**
+   * Defines the unique movement of each Monster by being overridden in children classes. By default, implements a
+   * random walking approach, as this is used by both Troll and TX5. Randomly turns left or right. If it hits a wall, it
+   * will return to face the `oldDirection` and go forward, or turn the other side. Otherwise, goes backwards.
+   */
+  public void walkApproach(){
+    // Random walk as default for Troll and TX5
     double oldDirection = getDirection();
+    int sign = getRandomiser().nextDouble() < 0.5 ? 1 : -1;
+    int angles[] = {sign*90, 0, -sign*90, 180};
 
-    // Walking approach:
-    // TX5: Determine direction to pacActor and try to move in that direction. Otherwise, random walk.
-    // Troll: Random walk.
-    Location.CompassDirection compassDir =
-      getLocation().get4CompassDirectionTo(pacLocation);
-    Location next = getLocation().getNeighbourLocation(compassDir);
-    setDirection(compassDir);
-    if (type == MonsterType.TX5 &&
-      !isVisited(next) && canMove(next))
-    {
-      setLocation(next);
-    }
-    else
-    {
-      // Random walk
-      int sign = randomiser.nextDouble() < 0.5 ? 1 : -1;
+    // Keep trying to move in each direction
+    for (int angle : angles){
       setDirection(oldDirection);
-      turn(sign * 90);  // Try to turn left/right
-      next = getNextMoveLocation();
-      if (canMove(next))
-      {
-        setLocation(next);
-      }
-      else
-      {
-        setDirection(oldDirection);
-        next = getNextMoveLocation();
-        if (canMove(next)) // Try to move forward
-        {
-          setLocation(next);
+      turn(angle);
+      Location next = getNextMoveLocation();
+      if (canMove(next)){
+        // Try to move two steps in the same direction if a Monster is furious
+        if (isFurious()){
+          Location doubleStep = next.getNeighbourLocation(getDirection());
+          if (canMove(doubleStep)){
+            next = doubleStep;
+          }
+          else {
+            continue;
+          }
         }
-        else
-        {
-          setDirection(oldDirection);
-          turn(-sign * 90);  // Try to turn right/left
-          next = getNextMoveLocation();
-          if (canMove(next))
-          {
-            setLocation(next);
-          }
-          else
-          {
+        setLocation(next);
+        this.getGame().getGameCallback().monsterLocationChanged(this);
+        addVisitedList(next);
+        return;
+      }
+    }
+  }
 
-            setDirection(oldDirection);
-            turn(180);  // Turn backward
-            next = getNextMoveLocation();
-            setLocation(next);
-          }
+  @Override
+  public Game getGame() {
+    return super.getGame();
+  }
+
+  public abstract String getType();
+
+  public boolean stoppedMoving(){
+    return this.stopMoving;
+  }
+
+  public boolean isFurious(){
+    return this.isFurious;
+  }
+
+  public void setStopMoving(boolean stopMoving) {
+    this.stopMoving = stopMoving;
+  }
+
+  /**
+   * gets all the 8 neighbours of the current Monster iteratively and checks if they are a valid move
+   * @return an ArrayList of all the valid neighbours
+   */
+  public ArrayList<Location> getNeighbourhood() {
+    int x = getX();
+    int y = getY();
+    ArrayList<Location> neighbourhood = new ArrayList<>();
+    for (int i = -1; i <= 1; i++) {
+      for (int j = -1; j <= 1; j++) {
+        Location location = new Location(x + i, y + j);
+        // Exclude The Current Location
+        if (canMove(location) && !(i == 0 && j == 0)) {
+          neighbourhood.add(location);
         }
       }
     }
-    game.getGameCallback().monsterLocationChanged(this);
-    addVisitedList(next);
+    return neighbourhood;
   }
 
-  public MonsterType getType() {
-    return type;
+  /**
+   * Gets the next best move based on shortest distance to the target location
+   * if it is furious gets the best move for 2 cells
+   * @param targetLocation the target that we want to move to
+   * @return an ArrayList of the best moves based on distance to the target
+   */
+  public ArrayList<Location> getNextMoves(Location targetLocation) {
+    ArrayList<Location> candidates = new ArrayList<>();
+    double shortestDistance = Double.MAX_VALUE;
+
+    // Check Each Neighbor Location
+    for (Location neighbor : getNeighbourhood()) {
+      if(isFurious){
+        // get the next location for 2 cells
+        Location doubleStep = neighbor.getNeighbourLocation(getLocation().getCompassDirectionTo(neighbor));
+        if (canMove(doubleStep)) {
+          neighbor = doubleStep;
+        }
+        else{
+          continue;
+        }
+      }
+
+
+      // Check For Walls
+      double distance = neighbor.getDistanceTo(targetLocation);
+
+      if (distance < shortestDistance) {
+        candidates.clear();
+        candidates.add(neighbor);
+        shortestDistance = distance;
+
+      } else if (distance == shortestDistance) {
+        candidates.add(neighbor);
+      }
+    }
+
+
+    return candidates;
   }
 
-  private void addVisitedList(Location location)
-  {
-    visitedList.add(location);
-    if (visitedList.size() == listLength)
-      visitedList.remove(0);
-  }
-
-  private boolean isVisited(Location location)
-  {
-    for (Location loc : visitedList)
-      if (loc.equals(location))
-        return true;
-    return false;
-  }
-
-  private boolean canMove(Location location)
-  {
-    Color c = getBackground().getColor(location);
-    if (c.equals(Color.gray) || location.getX() >= game.getNumHorzCells()
-          || location.getX() < 0 || location.getY() >= game.getNumVertCells() || location.getY() < 0)
-      return false;
-    else
-      return true;
-  }
 }
