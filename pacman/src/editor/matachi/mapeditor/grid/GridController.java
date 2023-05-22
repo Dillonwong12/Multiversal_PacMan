@@ -1,4 +1,4 @@
-package matachi.mapeditor.grid;
+package src.editor.matachi.mapeditor.grid;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,8 +8,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
-import matachi.mapeditor.editor.Constants;
-import matachi.mapeditor.editor.GUIInformation;
+import src.editor.matachi.mapeditor.editor.Constants;
+import src.editor.matachi.mapeditor.editor.GUIInformation;
 
 /**
  * Takes inputs from the GridView and communicated with a Camera.

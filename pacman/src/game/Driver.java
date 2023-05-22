@@ -1,7 +1,7 @@
-package src;
+package src.game;
 
-import src.utility.GameCallback;
-import src.utility.PropertiesLoader;
+import src.game.utility.GameCallback;
+import src.game.utility.PropertiesLoader;
 
 import java.util.Properties;
 
@@ -21,5 +21,9 @@ public class Driver {
         final Properties properties = PropertiesLoader.loadPropertiesFile(propertiesPath);
         GameCallback gameCallback = new GameCallback();
         new Game(gameCallback, properties);
+    }
+
+    public void getDriver() {
+        Driver driver = new Driver();
     }
 }

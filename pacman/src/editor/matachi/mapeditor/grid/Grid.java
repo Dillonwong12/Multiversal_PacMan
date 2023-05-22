@@ -1,4 +1,4 @@
-package matachi.mapeditor.grid;
+package src.editor.matachi.mapeditor.grid;
 
 import java.beans.PropertyChangeListener;
 

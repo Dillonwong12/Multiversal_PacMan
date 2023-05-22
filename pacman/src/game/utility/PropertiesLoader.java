@@ -1,4 +1,4 @@
-package src.utility;
+package src.game.utility;
 
 import java.io.FileInputStream;
 import java.io.IOException;

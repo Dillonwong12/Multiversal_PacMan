@@ -1,4 +1,4 @@
-package matachi.mapeditor.editor;
+package src.editor.matachi.mapeditor.editor;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -65,7 +65,7 @@ public class Tile {
 
 
 	/**
-	 * Get the tile as a icon.
+	 * Get the tile as an icon.
 	 * @return Icon The tile icon.
 	 */
 	public Icon getIcon() {
