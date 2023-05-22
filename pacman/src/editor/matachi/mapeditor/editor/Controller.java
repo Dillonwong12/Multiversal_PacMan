@@ -29,6 +29,7 @@ import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
+import src.game.Driver;
 
 /**
  * Controller of the application.
@@ -97,7 +98,7 @@ public class Controller implements ActionListener, GUIInformation {
 		} else if (e.getActionCommand().equals("update")) {
 			updateGrid(gridWith, gridHeight);
 		} else if (e.getActionCommand() .equals ("start_game")) {
-			// TODO: Code to switch to pacman game 
+			new Driver().getDriver();
 		}
 	}
 
