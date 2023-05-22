@@ -1,13 +1,14 @@
 // PacGrid.java
 package src.game;
 
-import ch.aplu.jgamegrid.*;
+import ch.aplu.jgamegrid.Location;
 
 public class PacManGameGrid
 {
   private int nbHorzCells;
   private int nbVertCells;
   private int[][] mazeArray;
+  private final String ids = "abcdefghijkl";
 
   public PacManGameGrid(int nbHorzCells, int nbVertCells)
   {
@@ -15,18 +16,17 @@ public class PacManGameGrid
     this.nbVertCells = nbVertCells;
     mazeArray = new int[nbVertCells][nbHorzCells];
     String maze =
-      "xxxxxxxxxxxxxxxxxxxx" + // 0
-      "x....x....g...x....x" + // 1
-      "xgxx.x.xxxxxx.x.xx.x" + // 2
-      "x.x.......i.g....x.x" + // 3
-      "x.x.xx.xx  xx.xx.x.x" + // 4
-      "x......x    x......x" + // 5
-      "x.x.xx.xxxxxx.xx.x.x" + // 6
-      "x.x......gi......x.x" + // 7
-      "xixx.x.xxxxxx.x.xx.x" + // 8
-      "x...gx....g...x....x" + // 9
-      "xxxxxxxxxxxxxxxxxxxx";// 10
-
+      "bkbbbbbbbbibbbbbbblb" + // 0
+      "bccccbccccdcccbccccb" + // 1
+      "bdbbcbcbbbbbbcbcbbcb" + // 2
+      "bcbcccccccecdccccbcb" + // 3
+      "bcbcbbcbbaabbcbbcbcb" + // 4
+      "jccccccbahagbccccccj" + // 5
+      "bcbcbbcbbbbbbcbbcbcb" + // 6
+      "bcbccccccdefcccccbcb" + // 7
+      "bebbcbcbbbbbbcbcbbcb" + // 8
+      "bcccdbccccdcccbccccb" + // 9
+      "blbbbbbbbbibbbbbbbkb";// 10
 
     // Copy structure into integer array
     for (int i = 0; i < nbVertCells; i++)
@@ -42,18 +42,9 @@ public class PacManGameGrid
   {
     return mazeArray[location.y][location.x];
   }
+
   private int toInt(char c)
   {
-    if (c == 'x')
-      return 0;
-    if (c == '.')
-      return 1;
-    if (c == ' ')
-      return 2;
-    if (c == 'g')
-      return 3;
-    if (c == 'i')
-      return 4;
-    return -1;
+    return ids.indexOf(c);
   }
 }

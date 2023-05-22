@@ -98,7 +98,7 @@ public class Controller implements ActionListener, GUIInformation {
 		} else if (e.getActionCommand().equals("update")) {
 			updateGrid(gridWith, gridHeight);
 		} else if (e.getActionCommand() .equals ("start_game")) {
-			new Driver().getDriver();
+			//
 		}
 	}
 
