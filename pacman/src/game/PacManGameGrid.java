@@ -25,17 +25,17 @@ public class PacManGameGrid
     this.nbVertCells = nbVertCells;
     mazeArray = new int[nbVertCells][nbHorzCells];
     String maze =
-      "bkbbbbbbbbibbbbbbblb" + // 0
+      "bbbbbbbbbbbbbbbbbbbb" + // 0
       "bccccbccccdcccbccccb" + // 1
       "bdbbcbcbbbbbbcbcbbcb" + // 2
       "bcbcccccccecdccccbcb" + // 3
       "bcbcbbcbbaabbcbbcbcb" + // 4
-      "jccccccbaaaabccccccj" + // 5
+      "bccccccbaaaabccccccb" + // 5
       "bcbcbbcbbbbbbcbbcbcb" + // 6
       "bcbccccccdefcccccbcb" + // 7
       "bebbcbcbbbbbbcbcbbcb" + // 8
       "bcccdbccccdcccbccccb" + // 9
-      "blbbbbbbbbibbbbbbbkb";// 10
+      "bbbbbbbbbbbbbbbbbbbb";// 10
 
     // Copy structure into integer array
     for (int i = 0; i < nbVertCells; i++)

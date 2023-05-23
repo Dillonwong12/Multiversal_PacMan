@@ -15,7 +15,7 @@ public abstract class Character extends Actor{
     private Game game;
     private int seed = 0;
     private Random randomiser = new Random();
-    private final int LIST_LENGTH = 200;
+    private final int LIST_LENGTH = 10;
 
     // Constructor for PacActor
     public Character(boolean b, String sprite, int nbSprites, Game game) {
