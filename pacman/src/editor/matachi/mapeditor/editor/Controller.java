@@ -100,7 +100,7 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 		} else if (e.getActionCommand().equals("save")) {
 			saveFile();
 			// after save we have to perform levelCheck
-
+			levelCheckFunction.checkLevel(model);
 		} else if (e.getActionCommand().equals("load")) {
 			loadFile();
 		} else if (e.getActionCommand().equals("update")) {
@@ -149,7 +149,6 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 	};
 
 	private void saveFile() {
-
 		JFileChooser chooser = new JFileChooser();
 		FileNameExtensionFilter filter = new FileNameExtensionFilter(
 				"xml files", "xml");

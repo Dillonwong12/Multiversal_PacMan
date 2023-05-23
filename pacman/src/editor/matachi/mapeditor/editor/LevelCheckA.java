@@ -4,6 +4,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import src.editor.matachi.mapeditor.grid.Grid;
 import src.editor.matachi.mapeditor.grid.GridModel;
 
 import javax.swing.*;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class LevelCheckA implements LevelCheckStrategy{
     @Override
-    public boolean checkLevel(GridModel currentModel) {
+    public boolean checkLevel(Grid currentModel) {
         int pacmanCount = 0;
         String pacmanLocations = "";
 

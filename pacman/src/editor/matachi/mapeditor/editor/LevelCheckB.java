@@ -2,6 +2,7 @@ package src.editor.matachi.mapeditor.editor;
 
 import org.jdom.JDOMException;
 import org.jdom.Element;
+import src.editor.matachi.mapeditor.grid.Grid;
 import src.editor.matachi.mapeditor.grid.GridModel;
 
 import java.io.File;
@@ -11,7 +12,7 @@ import java.util.HashMap;
 public class LevelCheckB implements LevelCheckStrategy {
 
     @Override
-    public boolean checkLevel(GridModel currentModel) {
+    public boolean checkLevel(Grid currentModel) {
         // hashmap of portal colors and their locations
         HashMap<Character, String> PortalLocations = new HashMap<Character, String>();
         // hashmap of portal colors and their count

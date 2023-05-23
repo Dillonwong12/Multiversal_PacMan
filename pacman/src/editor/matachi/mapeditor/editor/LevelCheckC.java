@@ -1,11 +1,12 @@
 package src.editor.matachi.mapeditor.editor;
 
+import src.editor.matachi.mapeditor.grid.Grid;
 import src.editor.matachi.mapeditor.grid.GridModel;
 
 public class LevelCheckC implements LevelCheckStrategy {
 
     @Override
-    public boolean checkLevel(GridModel currentModel) {
+    public boolean checkLevel(Grid currentModel) {
         int goldAndPillCount = 0;
 
         for(int y = 0; y < currentModel.getHeight(); y++){

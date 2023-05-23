@@ -4,6 +4,7 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
+import src.editor.matachi.mapeditor.grid.Grid;
 import src.editor.matachi.mapeditor.grid.GridModel;
 
 import java.io.File;
@@ -14,7 +15,7 @@ import java.util.Properties;
 
 public interface LevelCheckStrategy {
     // Function which checks if the level is valid based on their own rules
-    public abstract boolean checkLevel(GridModel currentModel);
+    public abstract boolean checkLevel(Grid currentModel);
 
 
 }

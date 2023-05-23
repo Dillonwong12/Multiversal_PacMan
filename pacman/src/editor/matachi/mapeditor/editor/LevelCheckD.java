@@ -1,6 +1,7 @@
 package src.editor.matachi.mapeditor.editor;
 
 import org.jdom.JDOMException;
+import src.editor.matachi.mapeditor.grid.Grid;
 import src.editor.matachi.mapeditor.grid.GridModel;
 
 import java.io.File;
@@ -12,7 +13,7 @@ import java.util.List;
 public class LevelCheckD implements LevelCheckStrategy{
 
     @Override
-    public boolean checkLevel(GridModel currentModel) {
+    public boolean checkLevel(Grid currentModel) {
         return false;
     }
 }

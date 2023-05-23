@@ -1,6 +1,7 @@
 package src.editor.matachi.mapeditor.editor;
 
 import org.jdom.JDOMException;
+import src.editor.matachi.mapeditor.grid.Grid;
 import src.editor.matachi.mapeditor.grid.GridModel;
 
 import java.io.File;
@@ -15,7 +16,7 @@ public abstract class CompositeLevelCheck implements LevelCheckStrategy{
         levelChecks.add(levelCheck);
     }
     @Override
-    public boolean checkLevel(GridModel currentModel)  {
+    public boolean checkLevel(Grid currentModel)  {
         for(LevelCheckStrategy levelCheck : levelChecks){
             if(!levelCheck.checkLevel(currentModel)){
                 return false;
