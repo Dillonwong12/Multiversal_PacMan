@@ -174,10 +174,6 @@ public class Game extends GameGrid
     return pillAndItemLocations;
   }
 
-  public ArrayList<Location> getPropertyGoldLocations() {
-    return propertyGoldLocations;
-  }
-
   public GameCallback getGameCallback() {
     return gameCallback;
   }
@@ -190,10 +186,6 @@ public class Game extends GameGrid
 
   public PacActor getPacActor() {
     return pacActor;
-  }
-
-  public ArrayList<Location> getPropertyPillLocations() {
-    return propertyPillLocations;
   }
 
   public void setSeed(int seed) {

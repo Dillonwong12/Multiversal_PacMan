@@ -14,6 +14,7 @@ public class GameLoaderHandler {
     public void loadCharacters(){
         // setup for autotest
         game.getPacActor().setAuto(Boolean.parseBoolean(game.getProperties().getProperty("PacMan.isAuto")));
+        game.getPacActor().setPillAndGoldLocations(game.getPillAndItemLocations());
         setupActorLocations();
         game.setSeed(Integer.parseInt(game.getProperties().getProperty("seed")));
         setActorsSeed(game.getSeed());
