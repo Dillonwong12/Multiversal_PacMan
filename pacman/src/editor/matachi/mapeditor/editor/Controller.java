@@ -8,11 +8,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.util.List;
+import java.util.Properties;
 
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -23,13 +22,14 @@ import src.editor.matachi.mapeditor.grid.GridCamera;
 import src.editor.matachi.mapeditor.grid.GridModel;
 import src.editor.matachi.mapeditor.grid.GridView;
 
-import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
-import src.game.Driver;
+import src.game.Game;
+import src.game.utility.GameCallback;
+import src.game.utility.PropertiesLoader;
 
 /**
  * Controller of the application.
@@ -39,7 +39,7 @@ import src.game.Driver;
  * @since v0.0.5
  * 
  */
-public class Controller implements ActionListener, GUIInformation {
+public class Controller extends SwingWorker<Void, Void> implements ActionListener, GUIInformation {
 
 	/**
 	 * The model of the map editor.
@@ -57,12 +57,18 @@ public class Controller implements ActionListener, GUIInformation {
 	private int gridWith = Constants.MAP_WIDTH;
 	private int gridHeight = Constants.MAP_HEIGHT;
 
+	private CompositeLevelCheck levelCheckFunction = new  CompositeABCDLevelCheck();
+
 	/**
 	 * Construct the controller.
 	 */
 	public Controller() {
 		init(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
 
+	}
+	@Override
+	protected Void doInBackground() throws Exception {
+		return null;
 	}
 
 	public void init(int width, int height) {
@@ -93,12 +99,28 @@ public class Controller implements ActionListener, GUIInformation {
 			// view.flipGrid();
 		} else if (e.getActionCommand().equals("save")) {
 			saveFile();
+			// after save we have to perform levelCheck
+
 		} else if (e.getActionCommand().equals("load")) {
 			loadFile();
 		} else if (e.getActionCommand().equals("update")) {
 			updateGrid(gridWith, gridHeight);
 		} else if (e.getActionCommand() .equals ("start_game")) {
-			//
+
+			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+				@Override
+				protected Void doInBackground() throws Exception {
+					String DEFAULT_PROPERTIES_PATH = "pacman/properties/test2.properties";
+					String propertiesPath = DEFAULT_PROPERTIES_PATH;
+					final Properties properties = PropertiesLoader.loadPropertiesFile(propertiesPath);
+					GameCallback gameCallback = new GameCallback();
+					new Game(gameCallback, properties);
+					//new Driver().getDriver();
+					return null;
+				}
+			};
+			worker.execute();
+
 		}
 	}
 
