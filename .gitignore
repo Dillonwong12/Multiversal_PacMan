@@ -38,3 +38,4 @@ Log.txt
 # BlueJ files
 *.ctxt
 
+.idea/uiDesigner.xml

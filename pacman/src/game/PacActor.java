@@ -23,22 +23,20 @@ public class PacActor extends Character implements GGKeyRepeatListener
   private int nbPills = 0;
   private int score = 0;
 
+  private ArrayList<Location> pillAndGoldLocations = new ArrayList<>();
+  private Location targetLocation = null;
+
   private List<String> propertyMoves = new ArrayList<>();
   private int propertyMoveIndex = 0;
   private boolean isAuto = false;
 
+  private int prevAngle = 90;
+  private int sign = 1;
+  private int turns = 0;
+
   public PacActor(Game game)
   {
     super(true, PAC_SPRITE, nbSprites, game);  // Rotatable
-  }
-
-  /**
-   * Parses a `propertyMoveString` to store a list of moves in `propertyMoves`. Used for Auto Testing.
-   */
-  public void setPropertyMoves(String propertyMoveString) {
-    if (propertyMoveString != null) {
-      this.propertyMoves = Arrays.asList(propertyMoveString.split(","));
-    }
   }
 
   /**
@@ -103,8 +101,7 @@ public class PacActor extends Character implements GGKeyRepeatListener
   private Location closestPillLocation() {
     int currentDistance = 1000;
     Location currentLocation = null;
-    List<Location> pillAndItemLocations = this.getGame().getPillAndItemLocations();
-    for (Location location: pillAndItemLocations) {
+    for (Location location: pillAndGoldLocations) {
       int distanceToPill = location.getDistanceTo(getLocation());
       if (distanceToPill < currentDistance) {
         currentLocation = location;
@@ -115,77 +112,72 @@ public class PacActor extends Character implements GGKeyRepeatListener
   }
 
   /**
-   * Moves PacActor according to the moves specified in `propertyMoves`
-   */
-  private void followPropertyMoves() {
-    String currentMove = propertyMoves.get(propertyMoveIndex);
-    switch(currentMove) {
-      case "R":
-        turn(90);
-        break;
-      case "L":
-        turn(-90);
-        break;
-      case "M":
-        Location next = getNextMoveLocation();
-        if (canMove(next)) {
-          setLocation(next);
-          eatItem(next);
-        }
-        break;
-    }
-    propertyMoveIndex++;
-  }
-
-  /**
    * First moves PacActor according to the moves specified in `propertyMoves`. Once there are no more moves to follow
    * from `propertyMoves`, attempts to walk towards the next `closestPill`.
    */
   private void moveInAutoMode() {
-    if (propertyMoves.size() > propertyMoveIndex) {
-      followPropertyMoves();
-      return;
-    }
     Location closestPill = closestPillLocation();
     double oldDirection = getDirection();
 
-    Location.CompassDirection compassDir =
-            getLocation().get4CompassDirectionTo(closestPill);
-    Location next = getLocation().getNeighbourLocation(compassDir);
-    setDirection(compassDir);
-    if (!isVisited(next) && canMove(next)) {
-      setLocation(next);
-    } else {
-      // normal movement
-      int sign = this.getRandomiser().nextDouble() < 0.5 ? 1 : -1;
+    //Location.CompassDirection compassDir = getLocation().get4CompassDirectionTo(closestPill);
+    // Location next = getLocation().getNeighbourLocation(compassDir);
+    // setDirection(compassDir);
+    Location next = getNextMoveLocation();
+    int angles[] = {sign*90, 0, -sign*90, 180};
+
+    // Keep trying to move in each direction
+    for (int angle : angles){
       setDirection(oldDirection);
-      turn(sign * 90);  // Try to turn left/right
+      turn(angle);
       next = getNextMoveLocation();
-      if (canMove(next)) {
-        setLocation(next);
-      } else {
-        setDirection(oldDirection);
-        next = getNextMoveLocation();
-        if (canMove(next)) // Try to move forward
-        {
-          setLocation(next);
-        } else {
-          setDirection(oldDirection);
-          turn(-sign * 90);  // Try to turn right/left
-          next = getNextMoveLocation();
-          if (canMove(next)) {
-            setLocation(next);
-          } else {
-            setDirection(oldDirection);
-            turn(180);  // Turn backward
-            next = getNextMoveLocation();
-            setLocation(next);
+      if (canMove(next)){
+        if (Math.abs(angle) == 90){
+          if (angle == prevAngle){
+            turns++;
           }
+          prevAngle = angle;
         }
+        if (turns >= 4){
+          sign *= -1;
+          turns = 0;
+        }
+        break;
       }
     }
+    System.out.println(turns);
+    setLocation(next);
     eatItem(next);
     addVisitedList(next);
+
+//    Location currentLocation = getLocation();
+//
+//    if (targetLocation!= null && currentLocation.equals(targetLocation)){
+//      pillAndGoldLocations.remove(targetLocation);
+//    }
+//
+//    targetLocation = closestPillLocation();
+//    ArrayList<Location> neighbourhood = getNeighbourhood();
+//    ArrayList<Location> candidates = getNextMoves(targetLocation);
+//    neighbourhood.removeAll(candidates);
+//    candidates.addAll(neighbourhood);
+//
+//    Location next = null;
+//
+//    // Select a Location randomly if there is more than one Location sharing the same shortest distance to the Gold
+//    if (!candidates.isEmpty()) {
+//      next = candidates.get(0);
+//      for (int i = 1; i < candidates.size(); i++){
+//        // if the next location is not visited, then we take it as the next location
+//        if (!isVisited(next)){
+//          break;
+//        }
+//        next = candidates.get(i);
+//      }
+//    }
+//    setDirection(getLocation().get4CompassDirectionTo(next));
+//    setLocation(next);
+//    addVisitedList(next);
+//    eatItem(next);
   }
 
   /***
@@ -236,4 +228,63 @@ public class PacActor extends Character implements GGKeyRepeatListener
   public void setScore(int score){
     this.score = score;
   }
+
+  public void setPillAndGoldLocations(ArrayList<Location> itemLocations){
+    pillAndGoldLocations.addAll(itemLocations);
+  }
+
+  /**
+   * gets all the 8 neighbours iteratively and checks if they are a valid move
+   * @return an ArrayList of all the valid neighbours
+   */
+  public ArrayList<Location> getNeighbourhood() {
+    int x = getX();
+    int y = getY();
+    ArrayList<Location> neighbourhood = new ArrayList<>();
+    for (int i = -1; i <= 1; i++) {
+      for (int j = -1; j <= 1; j++) {
+        if (Math.abs(i) == Math.abs(j)){
+          continue;
+        }
+        Location location = new Location(x + i, y + j);
+        // Exclude The Current Location
+        if (canMove(location)) {
+          neighbourhood.add(location);
+        }
+      }
+    }
+    return neighbourhood;
+  }
+
+
+
+  /**
+   * Gets the next best move based on shortest distance to the target location
+   * @param targetLocation the target that we want to move to
+   * @return an ArrayList of the best moves based on distance to the target
+   */
+  public ArrayList<Location> getNextMoves(Location targetLocation) {
+    ArrayList<Location> candidates = new ArrayList<>();
+    double shortestDistance = Double.MAX_VALUE;
+
+    // Check Each Neighbor Location
+    for (Location neighbor : getNeighbourhood()) {
+
+      // Check For Walls
+      double distance = neighbor.getDistanceTo(targetLocation);
+
+      if (distance < shortestDistance) {
+        candidates.clear();
+        candidates.add(neighbor);
+        shortestDistance = distance;
+
+      } else if (distance == shortestDistance) {
+        candidates.add(neighbor);
+      }
+    }
+
+    return candidates;
+  }
+
 }
+

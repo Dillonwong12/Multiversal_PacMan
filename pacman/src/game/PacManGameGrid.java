@@ -30,7 +30,7 @@ public class PacManGameGrid
       "bdbbcbcbbbbbbcbcbbcb" + // 2
       "bcbcccccccecdccccbcb" + // 3
       "bcbcbbcbbaabbcbbcbcb" + // 4
-      "jccccccbahagbccccccj" + // 5
+      "jccccccbaaaabccccccj" + // 5
       "bcbcbbcbbbbbbcbbcbcb" + // 6
       "bcbccccccdefcccccbcb" + // 7
       "bebbcbcbbbbbbcbcbbcb" + // 8
