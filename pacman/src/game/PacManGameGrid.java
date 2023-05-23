@@ -19,25 +19,34 @@ public class PacManGameGrid
   private int[][] mazeArray;
   private final String ids = "abcdefghijkl";
 
-  public PacManGameGrid(int nbHorzCells, int nbVertCells)
-  {
+  // default
+  public PacManGameGrid(int nbHorzCells, int nbVertCells){
     this.nbHorzCells = nbHorzCells;
     this.nbVertCells = nbVertCells;
     mazeArray = new int[nbVertCells][nbHorzCells];
     String maze =
-      "bkbbbbbbbbibbbbbbblb" + // 0
-      "bccccbccccdcccbccccb" + // 1
-      "bdbbcbcbbbbbbcbcbbcb" + // 2
-      "bcbcccccccecdccccbcb" + // 3
-      "bcbcbbcbbaabbcbbcbcb" + // 4
-      "jccccccbaaaabccccccj" + // 5
-      "bcbcbbcbbbbbbcbbcbcb" + // 6
-      "bcbccccccdefcccccbcb" + // 7
-      "bebbcbcbbbbbbcbcbbcb" + // 8
-      "bcccdbccccdcccbccccb" + // 9
-      "blbbbbbbbbibbbbbbbkb";// 10
+            "bkbbbbbbbbibbbbbbblb" + // 0
+                    "bccccbccccdcccbccccb" + // 1
+                    "bdbbcbcbbbbbbcbcbbcb" + // 2
+                    "bcbcccccccecdccccbcb" + // 3
+                    "bcbcbbcbbaabbcbbcbcb" + // 4
+                    "jccccccbaaaabccccccj" + // 5
+                    "bcbcbbcbbbbbbcbbcbcb" + // 6
+                    "bcbccccccdefcccccbcb" + // 7
+                    "bebbcbcbbbbbbcbcbbcb" + // 8
+                    "bcccdbccccdcccbccccb" + // 9
+                    "blbbbbbbbbibbbbbbbkb";// 10
 
-    // Copy structure into integer array
+    populateMazeArray(maze);
+  }
+
+  public PacManGameGrid(int nbHorzCells, int nbVertCells, File mapXML) throws IOException, JDOMException {
+    this(nbHorzCells, nbVertCells);
+    String maze = XMLToMaze(mapXML);
+    populateMazeArray(maze);
+  }
+
+  private void populateMazeArray(String maze) {
     for (int i = 0; i < nbVertCells; i++)
     {
       for (int k = 0; k < nbHorzCells; k++) {
