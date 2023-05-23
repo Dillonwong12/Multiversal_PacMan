@@ -116,16 +116,34 @@ public class PacActor extends Character implements GGKeyRepeatListener
    * from `propertyMoves`, attempts to walk towards the next `closestPill`.
    */
   private void moveInAutoMode() {
-    Location closestPill = closestPillLocation();
+    ArrayList<Location> neighbourhood = getNeighbourhood();
+    ArrayList<Location> candidates = new ArrayList<>();
     double oldDirection = getDirection();
 
-    //Location.CompassDirection compassDir = getLocation().get4CompassDirectionTo(closestPill);
-    // Location next = getLocation().getNeighbourLocation(compassDir);
-    // setDirection(compassDir);
-    Location next = getNextMoveLocation();
-    int angles[] = {sign*90, 0, -sign*90, 180};
+    for (Location loc : neighbourhood){
+      Color c = getBackground().getColor(loc);
+      if (canMove(loc) && (c.equals(Gold.GOLD_COLOR) || c.equals(Pill.PILL_COLOR))){
+        candidates.add(loc);
+      }
+    }
+    for (Location loc : neighbourhood){
+      Color c = getBackground().getColor(loc);
+      if (canMove(loc) && (c.equals(Ice.ICE_COLOR))){
+        candidates.add(loc);
+      }
+    }
+    if (candidates.size() > 0){
+      Location loc = candidates.get(0);
+      setDirection(getLocation().get4CompassDirectionTo(loc));
+      setLocation(loc);
+      eatItem(loc);
+      addVisitedList(loc);
+      return;
+    }
 
-    // Keep trying to move in each direction
+
+    int angles[] = {sign*90, 0, -sign*90, 180};
+    Location next = getNextMoveLocation();
     for (int angle : angles){
       setDirection(oldDirection);
       turn(angle);
@@ -144,7 +162,7 @@ public class PacActor extends Character implements GGKeyRepeatListener
         break;
       }
     }
-    System.out.println(turns);
+
     setLocation(next);
     eatItem(next);
     addVisitedList(next);
