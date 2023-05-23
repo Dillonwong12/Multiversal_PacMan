@@ -1,6 +1,8 @@
 package src.game;
 
 import src.editor.matachi.mapeditor.editor.Controller;
+import src.editor.matachi.mapeditor.editor.EditorStartingStrategyFactory;
+import src.editor.matachi.mapeditor.editor.StartingStrategy;
 import src.game.utility.GameCallback;
 import src.game.utility.PropertiesLoader;
 
@@ -17,8 +19,8 @@ public class Driver {
     public static void main(String[] args) {
         String propertiesPath = DEFAULT_PROPERTIES_PATH;
         final Properties properties = PropertiesLoader.loadPropertiesFile(propertiesPath);
-        new Controller();
         argsEditor = args;
+        EditorStartingStrategyFactory.getInstance().getStartingStrategy(argsEditor).startEditor(argsEditor);
     }
 
     public String[] getArgs() {

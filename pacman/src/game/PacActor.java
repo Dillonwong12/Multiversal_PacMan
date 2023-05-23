@@ -166,36 +166,6 @@ public class PacActor extends Character implements GGKeyRepeatListener
     setLocation(next);
     eatItem(next);
     addVisitedList(next);
-
-//    Location currentLocation = getLocation();
-//
-//    if (targetLocation!= null && currentLocation.equals(targetLocation)){
-//      pillAndGoldLocations.remove(targetLocation);
-//    }
-//
-//    targetLocation = closestPillLocation();
-//    ArrayList<Location> neighbourhood = getNeighbourhood();
-//    ArrayList<Location> candidates = getNextMoves(targetLocation);
-//    neighbourhood.removeAll(candidates);
-//    candidates.addAll(neighbourhood);
-//
-//    Location next = null;
-//
-//    // Select a Location randomly if there is more than one Location sharing the same shortest distance to the Gold
-//    if (!candidates.isEmpty()) {
-//      next = candidates.get(0);
-//      for (int i = 1; i < candidates.size(); i++){
-//        // if the next location is not visited, then we take it as the next location
-//        if (!isVisited(next)){
-//          break;
-//        }
-//        next = candidates.get(i);
-//      }
-//    }
-//    setDirection(getLocation().get4CompassDirectionTo(next));
-//    setLocation(next);
-//    addVisitedList(next);
-//    eatItem(next);
   }
 
   /***
