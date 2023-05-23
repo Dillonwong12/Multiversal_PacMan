@@ -9,9 +9,12 @@ import ch.aplu.jgamegrid.Actor;
 import ch.aplu.jgamegrid.GGBackground;
 import ch.aplu.jgamegrid.GameGrid;
 import ch.aplu.jgamegrid.Location;
+import org.jdom.JDOMException;
 import src.game.utility.GameCallback;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,10 +39,17 @@ public class Game extends GameGrid
   private ArrayList<Location> propertyGoldLocations = new ArrayList<>();
   private String gameVersion;
   private GameLoaderHandler gameLoaderHandler;
-  public Game(GameCallback gameCallback, Properties properties)
-  {
+  public Game(GameCallback gameCallback, Properties properties, File mapXML) throws IOException, JDOMException {
+
+
     // Setup game
     super(NB_HORZ_CELLS, NB_VERT_CELLS, 20, false);
+
+    // change the grid to file grid
+    if(mapXML != null){
+      grid = new PacManGameGrid(NB_HORZ_CELLS, NB_VERT_CELLS, mapXML);
+    }
+
     this.gameCallback = gameCallback;
     this.properties = properties;
     setSimulationPeriod(100);
@@ -108,6 +118,10 @@ public class Game extends GameGrid
     gameCallback.endOfGame(title);
 
     doPause();
+  }
+  // For Default Game
+  public Game(GameCallback gameCallback, Properties properties) throws IOException, JDOMException {
+    this(gameCallback, properties, null);
   }
 
   /**

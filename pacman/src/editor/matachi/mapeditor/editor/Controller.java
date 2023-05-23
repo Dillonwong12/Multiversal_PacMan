@@ -114,7 +114,8 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 					String propertiesPath = DEFAULT_PROPERTIES_PATH;
 					final Properties properties = PropertiesLoader.loadPropertiesFile(propertiesPath);
 					GameCallback gameCallback = new GameCallback();
-					new Game(gameCallback, properties);
+					File testFile = new File("pacman/sample_map1.xml");
+					new Game(gameCallback, properties,testFile);
 					//new Driver().getDriver();
 					return null;
 				}

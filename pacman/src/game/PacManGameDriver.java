@@ -1,8 +1,10 @@
 package src.game;
 
+import org.jdom.JDOMException;
 import src.game.utility.GameCallback;
 import src.game.utility.PropertiesLoader;
 
+import java.io.IOException;
 import java.util.Properties;
 
 public class PacManGameDriver {
@@ -14,7 +16,7 @@ public class PacManGameDriver {
      */
 
 
-    private void startGame(String[] args) {
+    private void startGame(String[] args) throws IOException, JDOMException {
         String propertiesPath = DEFAULT_PROPERTIES_PATH;
         if (args.length > 0) {
             propertiesPath = args[0];
