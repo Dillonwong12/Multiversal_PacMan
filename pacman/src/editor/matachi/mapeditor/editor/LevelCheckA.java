@@ -14,7 +14,7 @@ import java.util.List;
 
 public class LevelCheckA implements LevelCheckStrategy{
     @Override
-    public boolean checkLevel(Grid currentModel) {
+    public boolean checkLevel(Grid currentModel, String fileName) {
         int pacmanCount = 0;
         String pacmanLocations = "";
 
@@ -32,9 +32,12 @@ public class LevelCheckA implements LevelCheckStrategy{
         }
         if (pacmanCount == 1) {
             return true;
-        } else {
-            System.out.println("[Level" + "– more than one start for Pacman:" + pacmanLocations + "]");
+        } else if (pacmanCount > 1){
+            pacmanLocations = pacmanLocations.substring(0, pacmanLocations.length()-1);
+            System.out.println(String.format("[Level %s – more than one start for Pacman: %s]", fileName, pacmanLocations));
             return false;
         }
+        System.out.println(String.format("[Level %s – no start for PacMan]", fileName));
+        return false;
     }
 }

@@ -32,4 +32,14 @@ public class Logger {
             e.printStackTrace();
         }
     }
+
+//    public LoggerStrategy getLoggerStrategy(String fileOrFolderName) {
+//        LoggerStrategy loggerStrategy = null;
+//        // FileLogger
+//        if (fileOrFolderName.endsWith(".xml")){
+//
+//        }
+//
+//        return loggerStrategy;
+//    }
 }

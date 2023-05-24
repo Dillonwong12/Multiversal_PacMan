@@ -11,9 +11,9 @@ public abstract class CompositeLevelCheck implements LevelCheckStrategy{
         levelChecks.add(levelCheck);
     }
     @Override
-    public boolean checkLevel(Grid currentModel)  {
+    public boolean checkLevel(Grid currentModel, String fileName)  {
         for(LevelCheckStrategy levelCheck : levelChecks){
-            if(!levelCheck.checkLevel(currentModel)){
+            if(!levelCheck.checkLevel(currentModel, fileName)){
                 return false;
             }
         }

@@ -57,6 +57,8 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 	private int gridWith = Constants.MAP_WIDTH;
 	private int gridHeight = Constants.MAP_HEIGHT;
 
+	private File currentFile = null;
+
 
 	private CompositeLevelCheck levelCheckFunction = new  CompositeABCDLevelCheck();
 	private Properties properties;
@@ -121,25 +123,30 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 			// view.flipGrid();
 		} else if (e.getActionCommand().equals("save")) {
 			saveFile();
-			// after save we have to perform levelCheck
-			levelCheckFunction.checkLevel(model);
+
 		} else if (e.getActionCommand().equals("load")) {
 			loadFile();
 		} else if (e.getActionCommand().equals("update")) {
 			updateGrid(gridWith, gridHeight);
-		} else if (e.getActionCommand() .equals ("start_game")) {
-
-			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-				@Override
-				protected Void doInBackground() throws Exception {
-					GameCallback gameCallback = new GameCallback();
-					File testFile = new File("pacman/sample_map1.xml");
-					new Game(gameCallback, properties,testFile);
-					return null;
+		} else if (e.getActionCommand().equals("start_game")) {
+			if (currentFile != null && currentFile.exists() && currentFile.canRead()){
+				if (!levelCheckFunction.checkLevel(model, currentFile.getName())){
+					System.out.println(currentFile.getName() + " error: please refer to log file.");
+					return;
 				}
-			};
-			worker.execute();
-
+				SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+					@Override
+					protected Void doInBackground() throws Exception {
+						GameCallback gameCallback = new GameCallback();
+						new Game(gameCallback, properties, currentFile);
+						return null;
+					}
+				};
+				worker.execute();
+			}
+			else {
+				System.out.println("Only saved and loaded maps can be tested.");
+			}
 		}
 	}
 
@@ -147,6 +154,7 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 		view.close();
 		init(width, height);
 		view.setSize(width, height);
+		currentFile = null;
 	}
 
 	DocumentListener updateSizeFields = new DocumentListener() {
@@ -226,8 +234,10 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 				}
 				XMLOutputter xmlOutput = new XMLOutputter();
 				xmlOutput.setFormat(Format.getPrettyFormat());
-				xmlOutput
-						.output(doc, new FileWriter(chooser.getSelectedFile()));
+				xmlOutput.output(doc, new FileWriter(chooser.getSelectedFile()));
+				// Perform level check
+				levelCheckFunction.checkLevel(model, chooser.getSelectedFile().getName());
+				currentFile = chooser.getSelectedFile();
 			}
 		} catch (FileNotFoundException e1) {
 			JOptionPane.showMessageDialog(null, "Invalid file!", "error",
@@ -313,6 +323,7 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 
 				String mapString = model.getMapAsString();
 				grid.redrawGrid();
+				currentFile = selectedFile;
 			}
 		}
 		catch (Exception e){
@@ -330,10 +341,14 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 
 	public void setProperties(String propertiesPath) {
 		this.properties = PropertiesLoader.loadPropertiesFile(propertiesPath);
-		view.close();
+		//view.close();
 	}
 
 	public Properties getProperties() {
 		return properties;
+	}
+
+	public Grid getModel() {
+		return model;
 	}
 }
