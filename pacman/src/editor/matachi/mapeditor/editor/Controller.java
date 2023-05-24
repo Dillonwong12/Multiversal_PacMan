@@ -154,7 +154,6 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 		view.close();
 		init(width, height);
 		view.setSize(width, height);
-		currentFile = null;
 	}
 
 	DocumentListener updateSizeFields = new DocumentListener() {
@@ -173,6 +172,7 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 			gridWith = view.getWidth();
 			gridHeight = view.getHeight();
 		}
+
 	};
 
 	private void saveFile() {
@@ -350,5 +350,9 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 
 	public Grid getModel() {
 		return model;
+	}
+
+	public void setCurrentFileNull(){
+		this.currentFile = null;
 	}
 }

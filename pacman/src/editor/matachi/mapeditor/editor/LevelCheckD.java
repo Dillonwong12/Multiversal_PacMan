@@ -55,25 +55,24 @@ public class LevelCheckD implements LevelCheckStrategy{
         }
         if (inaccessiblePills.length() > 0){
             inaccessiblePills = inaccessiblePills.substring(0, inaccessiblePills.length()-1);
-            System.out.println(String.format("[Level %s – Pill not accessible: %s", fileName, inaccessiblePills));
+            System.out.println(String.format("[Level %s – Pill not accessible: %s]", fileName, inaccessiblePills));
         }
         if (inaccessibleGold.length() > 0){
             inaccessibleGold = inaccessibleGold.substring(0, inaccessibleGold.length()-1);
-            System.out.println(String.format("[Level %s – Gold not accessible: %s", fileName, inaccessibleGold));
-
+            System.out.println(String.format("[Level %s – Gold not accessible: %s]", fileName, inaccessibleGold));
         }
+        pillAndGoldLocations.clear();
         return false;
     }
 
     private boolean DFS(Grid currentModel, Point root) {
-        int accessible = 0;
         ArrayList<Point> visited = new ArrayList<>();
         Point curr = root;
         stack.add(root);
         while (stack.size() > 0){
             curr = stack.remove(stack.size()-1);
             visited.add(curr);
-            System.out.println(curr);
+
             int X = (int)curr.getX();
             int Y = (int)curr.getY();
             char currTile = currentModel.getTile(X, Y);
@@ -95,7 +94,7 @@ public class LevelCheckD implements LevelCheckStrategy{
 
                                 // Find pair portal
                                 if (cellValue == tile && (x != (int)curr.getX() && y != (int)curr.getY())){
-                                    stack.add(new Point((int)curr.getX(), (int)curr.getY()));
+                                    stack.add(new Point(x, y));
                                     break;
                                 }
                             }

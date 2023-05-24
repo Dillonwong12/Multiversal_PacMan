@@ -97,9 +97,9 @@ public class Game extends GameGrid
         }
       }
       hasPacmanEatAllPills = pacActor.getScore() >= maxScore;
-      delay(10);
+      //delay(1);
     } while(!hasPacmanBeenHit && !hasPacmanEatAllPills);
-    delay(120);
+    delay(1);
 
     Location loc = pacActor.getLocation();
     setMonstersStopMove(true);
