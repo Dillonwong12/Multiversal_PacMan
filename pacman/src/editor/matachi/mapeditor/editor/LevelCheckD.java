@@ -13,7 +13,7 @@ import java.util.List;
 public class LevelCheckD implements LevelCheckStrategy{
 
     @Override
-    public boolean checkLevel(Grid currentModel) {
-        return false;
+    public boolean checkLevel(Grid currentModel, String fileName) {
+        return true;
     }
 }

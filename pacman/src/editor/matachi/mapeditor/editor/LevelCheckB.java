@@ -12,7 +12,7 @@ import java.util.HashMap;
 public class LevelCheckB implements LevelCheckStrategy {
 
     @Override
-    public boolean checkLevel(Grid currentModel) {
+    public boolean checkLevel(Grid currentModel, String fileName) {
         // hashmap of portal colors and their locations
         HashMap<Character, String> PortalLocations = new HashMap<Character, String>();
         // hashmap of portal colors and their count
@@ -38,7 +38,8 @@ public class LevelCheckB implements LevelCheckStrategy {
         }
         for (Character portalColor : PortalCount.keySet()) {
             if (PortalCount.get(portalColor) != 2) {
-                System.out.println("[Level – portal " + PortalNames.get(portalColor) + " count is not 2:" + PortalLocations.get(portalColor) + "]");
+                String portalLocations = PortalLocations.get(portalColor);
+                System.out.println("[Level " + fileName + "portal " + PortalNames.get(portalColor) + " count is not 2:" + portalLocations.substring(0, portalLocations.length()-1) + "]");
                 return false;
             }
         }
