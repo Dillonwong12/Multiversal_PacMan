@@ -1,4 +1,5 @@
 package src.editor.matachi.mapeditor.editor;
+import java.io.DataInputStream;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -6,13 +7,14 @@ import org.jdom.JDOMException;
 import src.game.Game;
 import src.game.utility.GameCallback;
 import src.game.utility.PropertiesLoader;
-
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Properties;
 
-public class FolderStartingStrategy implements StartingStrategy{
+public class FolderStartingStrategy implements StartingStrategy {
 
     @Override
     public void startEditor(String[] argsEditor) throws IOException, JDOMException {
@@ -24,62 +26,69 @@ public class FolderStartingStrategy implements StartingStrategy{
             File directoryPath = new File(argsEditor[0]);
             File files[] = directoryPath.listFiles();
             System.out.println(Arrays.asList(files));
-            for (int i=0; i<files.length; i++) {
+            for (int i = 0; i < files.length; i++) {
                 gameFiles.add(files[i].getName());
             }
             // Game check
-            if (compositeABGameCheck.checkGame(gameFiles, directoryPath.getName())){
+            if (compositeABGameCheck.checkGame(gameFiles, directoryPath.getName())) {
                 System.out.println(compositeABGameCheck.getFormattedFiles());
-            }
-            else {
+            } else {
                 System.out.println("check failed");
                 System.out.println(compositeABGameCheck.getFormattedFiles());
                 return;
             }
-
-            for (File file: files){
-                if(compositeABGameCheck.getFormattedFiles().contains(file.getName())){
-                    Controller.getInstance().loadSelectedFile(file);
-                    if (!compositeABCDLevelCheck.checkLevel(Controller.getInstance().getModel(), file.getName())){
-                        System.out.println(file.getName() + " error: please refer to log file.");
+            int i = 0;
+            while (i < files.length) {
+                boolean finished = false;
+                boolean won = false;
+                if (compositeABGameCheck.getFormattedFiles().contains(files[i].getName())) {
+                    Controller.getInstance().loadSelectedFile(files[i]);
+                    if (!compositeABCDLevelCheck.checkLevel(Controller.getInstance().getModel(), files[i].getName())) {
+                        System.out.println(files[i].getName() + " error: please refer to log file.");
                         break;
                     }
-                    Game game =  new Game(new GameCallback(), Controller.getInstance().getProperties(), file);
-                    // check if we won or lost the game
-                    if(!game.isGameWon()){
-                        // go to edit mode if lost
-                        controller = Controller.getInstance();
-                        break;
 
+                    String filePath = files[i].getPath();
+                    String classPath = "out:out/lib/jdom-1.1.3.jar:out/lib/JGameGrid.jar";
+                    String mainClass = "src.game.GameDriver";
+
+                    ProcessBuilder process = new ProcessBuilder("java", "-cp", classPath, mainClass, Controller.getInstance().getPropertiesPath(), filePath, "true");
+                    process.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+                    process.redirectError(ProcessBuilder.Redirect.INHERIT);
+
+                    try {
+                        Process p = process.start();
+                        ServerSocket serverSocket = new ServerSocket(8000);
+                        Socket socket = serverSocket.accept();
+                        DataInputStream in = new DataInputStream(socket.getInputStream());
+
+                        // get from game socket
+                        won = in.readBoolean();
+                        System.out.println("won: " + won);
+                        socket.close();
+                        serverSocket.close();
+                        // if we win
+                        if (won) {
+                            i++;
+                            continue;
+                        }
+                        else{
+                            Controller.getInstance().resetEditor();
+                            Controller.getInstance();
+                            break;
+                        }
+
+
+                    } catch (IOException ex) {
+                        throw new RuntimeException(ex);
                     }
                 }
+
             }
-        }
-        catch (Exception e){
-            e.printStackTrace();
+        } finally {
+
         }
     }
 }
-//    public void startEditor(String[] argsEditor) {
-//        File folder = new File(argsEditor[0]);
-//        System.out.println("Folder: " + folder.getAbsolutePath());
-//        // GAME CHECK GOES HERE
-//
-//        // get array of files inside the folder
-//        File[] files= folder.listFiles();
-//
-//        for(File file:files){
-//            // if game check passes play each level
-//            Game game =  new Game(new GameCallback(), Controller.getInstance().getProperties(), file);
-//            // check if we won or lost the game
-//            if(!game.isGameWon()){
-//                // go to edit mode if lost
-//                Controller controller = Controller.getInstance();
-//                break;
-//
-//            }
-//        }
-//
-//    }
 
 
