@@ -1,1 +1,1 @@
-[Level 1map_level.xml – no start for PacMan]
+[Game gameCheckFolder – no maps found]

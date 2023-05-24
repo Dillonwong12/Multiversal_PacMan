@@ -5,5 +5,5 @@ import org.jdom.JDOMException;
 import java.io.IOException;
 
 public interface StartingStrategy {
-    void startEditor(String[] argsEditor) throws IOException, JDOMException;
+    void startEditor(String[] argsEditor) throws Exception;
 }

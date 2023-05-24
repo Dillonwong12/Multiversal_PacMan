@@ -138,7 +138,7 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 				String classPath = "out:out/lib/jdom-1.1.3.jar:out/lib/JGameGrid.jar";
 				String mainClass = "src.game.GameDriver";
 
-				ProcessBuilder process = new ProcessBuilder("java", "-cp", classPath, mainClass, propertiesPath, filePath);
+				ProcessBuilder process = new ProcessBuilder("java", "-cp", classPath, mainClass, propertiesPath, filePath,"false");
 				process.redirectOutput(ProcessBuilder.Redirect.INHERIT);
 				process.redirectError(ProcessBuilder.Redirect.INHERIT);
 

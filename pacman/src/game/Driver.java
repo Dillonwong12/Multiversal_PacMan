@@ -18,7 +18,7 @@ public class Driver {
      * @param args the command line arguments
      */
     private static String[] argsEditor;
-    public static void main(String[] args) throws IOException, JDOMException {
+    public static void main(String[] args) throws Exception {
         Controller.getInstance().setProperties(DEFAULT_PROPERTIES_PATH);
         argsEditor = args;
         EditorStartingStrategyFactory.getInstance().getStartingStrategy(argsEditor).startEditor(argsEditor);

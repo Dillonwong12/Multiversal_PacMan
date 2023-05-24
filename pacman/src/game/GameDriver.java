@@ -23,7 +23,8 @@ public class GameDriver {
         Game game = new Game(gameCallback, properties, file);
 
         // check if args[2] is not null as in if folder starting strategy called it
-        if(args[2] != null){
+        if(args[2].equals("true")){
+
             Socket socket = new Socket("localhost", 8000);
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 
