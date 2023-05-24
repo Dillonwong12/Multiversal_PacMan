@@ -22,7 +22,7 @@ public class LevelCheckC implements LevelCheckStrategy {
 
         // less than 2 gold and pill tiles
         if(goldAndPillCount < 2){
-            System.out.println(String.format("[Level %s less than 2 Gold and Pill]", fileName));
+            ErrorLogger.getInstance().writeString(String.format("[Level %s less than 2 Gold and Pill]", fileName));
             return false;
         }
 

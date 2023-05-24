@@ -6,7 +6,7 @@ public class GameCheckA implements GameCheckStrategy {
     @Override
     public boolean checkGame(ArrayList<String> formattedFiles, String directoryName) {
         if (formattedFiles.size() == 0){
-            System.out.println(String.format("[Game %s – no maps found]", directoryName));
+            ErrorLogger.getInstance().writeString(String.format("[Game %s – no maps found]", directoryName));
             return false;
         }
         return true;

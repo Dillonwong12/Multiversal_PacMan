@@ -55,11 +55,11 @@ public class LevelCheckD implements LevelCheckStrategy{
         }
         if (inaccessiblePills.length() > 0){
             inaccessiblePills = inaccessiblePills.substring(0, inaccessiblePills.length()-1);
-            System.out.println(String.format("[Level %s – Pill not accessible: %s]", fileName, inaccessiblePills));
+            ErrorLogger.getInstance().writeString(String.format("[Level %s – Pill not accessible: %s]", fileName, inaccessiblePills));
         }
         if (inaccessibleGold.length() > 0){
             inaccessibleGold = inaccessibleGold.substring(0, inaccessibleGold.length()-1);
-            System.out.println(String.format("[Level %s – Gold not accessible: %s]", fileName, inaccessibleGold));
+            ErrorLogger.getInstance().writeString(String.format("[Level %s – Gold not accessible: %s]", fileName, inaccessibleGold));
         }
         pillAndGoldLocations.clear();
         return false;
@@ -82,8 +82,9 @@ public class LevelCheckD implements LevelCheckStrategy{
             neighbours.add(new Point(X-1, Y));
             neighbours.add(new Point(X, Y-1));
             for (Point neighbour : neighbours){
-                char tile = currentModel.getTile((int)neighbour.getX(), (int)neighbour.getY());
+
                 if (!visited.contains(neighbour) && neighbour.getX() >= 0 && neighbour.getX() < 20 && neighbour.getY() >= 0 && neighbour.getY() < 11){
+                    char tile = currentModel.getTile((int)neighbour.getX(), (int)neighbour.getY());
                     if (tile == 'b'){
                         continue;
                     }

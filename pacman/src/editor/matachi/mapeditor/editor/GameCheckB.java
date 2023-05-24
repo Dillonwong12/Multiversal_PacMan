@@ -26,13 +26,11 @@ public class GameCheckB implements GameCheckStrategy {
                     invalidMaps += str+"; ";
                 }
                 String invalidMapsStr = invalidMaps.substring(0, invalidMaps.length()-2);
-                System.out.println(String.format("[Game %s – multiple maps at same level: %s]", directoryName, invalidMapsStr));
+                ErrorLogger.getInstance().writeString(String.format("[Game %s – multiple maps at same level: %s]", directoryName, invalidMapsStr));
                 return false;
             }
         }
 
         return true;
     }
-
-
 }

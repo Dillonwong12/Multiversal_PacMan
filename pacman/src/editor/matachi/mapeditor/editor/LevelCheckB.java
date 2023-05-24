@@ -39,7 +39,7 @@ public class LevelCheckB implements LevelCheckStrategy {
         for (Character portalColor : PortalCount.keySet()) {
             if (PortalCount.get(portalColor) != 2) {
                 String portalLocations = PortalLocations.get(portalColor);
-                System.out.println("[Level " + fileName + "portal " + PortalNames.get(portalColor) + " count is not 2:" + portalLocations.substring(0, portalLocations.length()-1) + "]");
+                ErrorLogger.getInstance().writeString("[Level " + fileName + " portal " + PortalNames.get(portalColor) + " count is not 2:" + portalLocations.substring(0, portalLocations.length()-1) + "]");
                 return false;
             }
         }

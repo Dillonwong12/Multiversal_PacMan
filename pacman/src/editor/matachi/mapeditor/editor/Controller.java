@@ -131,7 +131,7 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 		} else if (e.getActionCommand().equals("start_game")) {
 			if (currentFile != null && currentFile.exists() && currentFile.canRead()){
 				if (!levelCheckFunction.checkLevel(model, currentFile.getName())){
-					System.out.println(currentFile.getName() + " error: please refer to log file.");
+					System.out.println(currentFile.getName() + " error: please refer to EditorErrorLog.txt.");
 					return;
 				}
 				SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {

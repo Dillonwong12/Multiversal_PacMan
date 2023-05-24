@@ -34,10 +34,10 @@ public class LevelCheckA implements LevelCheckStrategy{
             return true;
         } else if (pacmanCount > 1){
             pacmanLocations = pacmanLocations.substring(0, pacmanLocations.length()-1);
-            System.out.println(String.format("[Level %s – more than one start for Pacman: %s]", fileName, pacmanLocations));
+            ErrorLogger.getInstance().writeString(String.format("[Level %s – more than one start for Pacman: %s]", fileName, pacmanLocations));
             return false;
         }
-        System.out.println(String.format("[Level %s – no start for PacMan]", fileName));
+        ErrorLogger.getInstance().writeString(String.format("[Level %s – no start for PacMan]", fileName));
         return false;
     }
 }

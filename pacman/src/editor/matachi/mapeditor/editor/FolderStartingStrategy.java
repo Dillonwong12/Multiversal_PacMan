@@ -10,6 +10,7 @@ import src.game.utility.PropertiesLoader;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Properties;
 
 public class FolderStartingStrategy implements StartingStrategy{
@@ -23,37 +24,42 @@ public class FolderStartingStrategy implements StartingStrategy{
         try {
             File directoryPath = new File(argsEditor[0]);
             File files[] = directoryPath.listFiles();
-            System.out.println(Arrays.asList(files));
             for (int i=0; i<files.length; i++) {
                 gameFiles.add(files[i].getName());
             }
             // Game check
-            if (compositeABGameCheck.checkGame(gameFiles, directoryPath.getName())){
-                System.out.println(compositeABGameCheck.getFormattedFiles());
-            }
-            else {
-                System.out.println("check failed");
+            if (!compositeABGameCheck.checkGame(gameFiles, directoryPath.getName())){
+                System.out.println("%s error: please refer to EditorErrorLog.txt");
                 System.out.println(compositeABGameCheck.getFormattedFiles());
                 return;
             }
-
-            for (File file: files){
-                if(compositeABGameCheck.getFormattedFiles().contains(file.getName())){
-                    Controller.getInstance().loadSelectedFile(file);
-                    if (!compositeABCDLevelCheck.checkLevel(Controller.getInstance().getModel(), file.getName())){
-                        System.out.println(file.getName() + " error: please refer to log file.");
+            List<File> fileArr = Arrays.asList(files);
+            boolean returnToEditor = false;
+            for (String fileName: compositeABGameCheck.getFormattedFiles()){
+                for (File file: fileArr){
+                    if (file.getName().equals(fileName)){
+                        Controller.getInstance().loadSelectedFile(file);
+                        if (!compositeABCDLevelCheck.checkLevel(Controller.getInstance().getModel(), file.getName())){
+                            System.out.println(file.getName() + " error: please refer to log file.");
+                            return;
+                        }
+                        Game game =  new Game(new GameCallback(), Controller.getInstance().getProperties(), file);
+                        // check if we won or lost the game
+                        if(!game.isGameWon()){
+                            // go to edit mode if lost
+                            returnToEditor = true;
+                            controller = Controller.getInstance();
+                            break;
+                        }
                         break;
-                    }
-                    Game game =  new Game(new GameCallback(), Controller.getInstance().getProperties(), file);
-                    // check if we won or lost the game
-                    if(!game.isGameWon()){
-                        // go to edit mode if lost
-                        controller = Controller.getInstance();
-                        break;
-
                     }
                 }
+                if (returnToEditor){
+                    // Return to edit mode with no current map
+                    return;
+                }
             }
+            // Return to edit mode with no current map
         }
         catch (Exception e){
             e.printStackTrace();

@@ -87,19 +87,22 @@ public class Game extends GameGrid
         }
         Color c = bg.getColor(location);
         if (c.equals(Portal.PORTAL_COLOR)){
+          Location pairPortalLocation = null;
           for (Location loc: itemLocations.keySet()) {
             if (loc.equals(location)) {
-              Item item = itemLocations.get(loc);
-              Portal p = (Portal)item;
-              p.teleport(monster);
+              pairPortalLocation = loc;
+              break;
             }
           }
+          Item item = itemLocations.get(pairPortalLocation);
+          Portal p = (Portal)item;
+          p.teleport(monster);
         }
       }
       hasPacmanEatAllPills = pacActor.getScore() >= maxScore;
-      //delay(1);
+      delay(10);
     } while(!hasPacmanBeenHit && !hasPacmanEatAllPills);
-    delay(1);
+    delay(10);
 
     Location loc = pacActor.getLocation();
     setMonstersStopMove(true);

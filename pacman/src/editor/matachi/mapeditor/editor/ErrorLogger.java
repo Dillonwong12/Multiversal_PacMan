@@ -3,12 +3,12 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-public class Logger {
-    private static Logger instance;
-    private String logFilePath = "EditorLog.txt";
+public class ErrorLogger {
+    private static ErrorLogger instance;
+    private String logFilePath = "EditorErrorLog.txt";
     private FileWriter fileWriter = null;
 
-    public Logger(){
+    public ErrorLogger(){
         try {
             fileWriter = new FileWriter(new File(logFilePath));
         } catch (IOException ex) {
@@ -16,9 +16,9 @@ public class Logger {
         }
     }
 
-    public static Logger getInstance() {
+    public static ErrorLogger getInstance() {
         if (instance == null) {
-            instance = new Logger();
+            instance = new ErrorLogger();
         }
         return instance;
     }
@@ -32,14 +32,4 @@ public class Logger {
             e.printStackTrace();
         }
     }
-
-//    public LoggerStrategy getLoggerStrategy(String fileOrFolderName) {
-//        LoggerStrategy loggerStrategy = null;
-//        // FileLogger
-//        if (fileOrFolderName.endsWith(".xml")){
-//
-//        }
-//
-//        return loggerStrategy;
-//    }
 }
