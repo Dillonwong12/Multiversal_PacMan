@@ -1,11 +1,13 @@
 package src.game;
 
+import org.jdom.JDOMException;
 import src.editor.matachi.mapeditor.editor.Controller;
 import src.editor.matachi.mapeditor.editor.EditorStartingStrategyFactory;
 import src.editor.matachi.mapeditor.editor.StartingStrategy;
 import src.game.utility.GameCallback;
 import src.game.utility.PropertiesLoader;
 
+import java.io.IOException;
 import java.util.Properties;
 
 public class Driver {
@@ -16,9 +18,8 @@ public class Driver {
      * @param args the command line arguments
      */
     private static String[] argsEditor;
-    public static void main(String[] args) {
-        String propertiesPath = DEFAULT_PROPERTIES_PATH;
-        final Properties properties = PropertiesLoader.loadPropertiesFile(propertiesPath);
+    public static void main(String[] args) throws IOException, JDOMException {
+        Controller.getInstance().setProperties(DEFAULT_PROPERTIES_PATH);
         argsEditor = args;
         EditorStartingStrategyFactory.getInstance().getStartingStrategy(argsEditor).startEditor(argsEditor);
     }

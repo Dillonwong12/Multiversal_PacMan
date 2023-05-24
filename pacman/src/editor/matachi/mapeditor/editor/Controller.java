@@ -57,15 +57,37 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 	private int gridWith = Constants.MAP_WIDTH;
 	private int gridHeight = Constants.MAP_HEIGHT;
 
-	private CompositeLevelCheck levelCheckFunction = new CompositeABCDLevelCheck();
+
+	private CompositeLevelCheck levelCheckFunction = new  CompositeABCDLevelCheck();
+	private Properties properties;
+
+	/**
+	 * The instance of the controller.
+	 * Controller is a singleton
+	 */
+	private static Controller instance = null;
+
 
 	/**
 	 * Construct the controller.
 	 */
-	public Controller() {
+	private Controller() {
 		init(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
 
 	}
+
+	/**
+	 * Returns the single instance of the Controller class.
+	 */
+	public static Controller getInstance() {
+		if (instance == null) {
+			instance = new Controller();
+		}
+		return instance;
+	}
+
+
+
 	@Override
 	protected Void doInBackground() throws Exception {
 		return null;
@@ -110,13 +132,9 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 			SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 				@Override
 				protected Void doInBackground() throws Exception {
-					String DEFAULT_PROPERTIES_PATH = "pacman/properties/test2.properties";
-					String propertiesPath = DEFAULT_PROPERTIES_PATH;
-					final Properties properties = PropertiesLoader.loadPropertiesFile(propertiesPath);
 					GameCallback gameCallback = new GameCallback();
 					File testFile = new File("pacman/sample_map1.xml");
 					new Game(gameCallback, properties,testFile);
-					//new Driver().getDriver();
 					return null;
 				}
 			};
@@ -308,5 +326,14 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 	@Override
 	public Tile getSelectedTile() {
 		return selectedTile;
+	}
+
+	public void setProperties(String propertiesPath) {
+		this.properties = PropertiesLoader.loadPropertiesFile(propertiesPath);
+		view.close();
+	}
+
+	public Properties getProperties() {
+		return properties;
 	}
 }

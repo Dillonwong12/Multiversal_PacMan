@@ -7,7 +7,7 @@ public class Main {
 
 	private static String[] argsEditor;
 	public static void main(String[] args) {
-		new Controller();
+		Controller.getInstance();
 		argsEditor = args;
 	}
 
