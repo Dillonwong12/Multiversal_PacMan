@@ -39,6 +39,7 @@ public class Game extends GameGrid
   private ArrayList<Location> propertyGoldLocations = new ArrayList<>();
   private String gameVersion;
   private GameLoaderHandler gameLoaderHandler;
+  private boolean isGameWon = false;
   public Game(GameCallback gameCallback, Properties properties, File mapXML) throws IOException, JDOMException {
 
 
@@ -113,6 +114,7 @@ public class Game extends GameGrid
     } else if (hasPacmanEatAllPills) {
       bg.setPaintColor(Color.yellow);
       title = "YOU WIN";
+      this.setGameWon(true);
     }
     setTitle(title);
     gameCallback.endOfGame(title);
@@ -220,5 +222,13 @@ public class Game extends GameGrid
 
   public int getSeed() {
     return seed;
+  }
+
+  public void setGameWon(boolean gameWon) {
+    isGameWon = gameWon;
+  }
+
+  public boolean isGameWon() {
+    return isGameWon;
   }
 }

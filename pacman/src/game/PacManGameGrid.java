@@ -37,18 +37,6 @@ public class PacManGameGrid
       "bcccdbccccdcccbccccb" + // 9
       "bbbbbbbbbbbbbbbbbbbb";// 10
 
-            "bkbbbbbbbbibbbbbbblb" + // 0
-            "bccccbccccdcccbccccb" + // 1
-            "bdbbcbcbbbbbbcbcbbcb" + // 2
-            "bcbcccccccecdccccbcb" + // 3
-            "bcbcbbcbbaabbcbbcbcb" + // 4
-            "jccccccbaaaabccccccj" + // 5
-            "bcbcbbcbbbbbbcbbcbcb" + // 6
-            "bcbccccccdefcccccbcb" + // 7
-            "bebbcbcbbbbbbcbcbbcb" + // 8
-            "bcccdbccccdcccbccccb" + // 9
-            "blbbbbbbbbibbbbbbbkb";// 10
-
     populateMazeArray(maze);
   }
 
