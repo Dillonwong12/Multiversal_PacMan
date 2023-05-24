@@ -5,13 +5,11 @@
  */
 package src.game;
 
-import ch.aplu.jgamegrid.Actor;
-import ch.aplu.jgamegrid.GGBackground;
-import ch.aplu.jgamegrid.GameGrid;
-import ch.aplu.jgamegrid.Location;
+import ch.aplu.jgamegrid.*;
 import org.jdom.JDOMException;
 import src.game.utility.GameCallback;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +19,7 @@ import java.util.Map;
 import java.util.Properties;
 
 
-public class Game extends GameGrid
+public class Game extends GameGrid implements GGExitListener
 {
   private final static int NB_HORZ_CELLS = 20;
   private final static int NB_VERT_CELLS = 11;
@@ -177,6 +175,9 @@ public class Game extends GameGrid
     }
   }
 
+
+  //
+
   public int getNumHorzCells(){
     return this.NB_HORZ_CELLS;
   }
@@ -233,5 +234,12 @@ public class Game extends GameGrid
 
   public boolean isGameWon() {
     return isGameWon;
+  }
+
+  @Override
+  public boolean notifyExit() {
+    this.setVisible(false);
+    System.out.println("Game is exiting");
+    return false;
   }
 }

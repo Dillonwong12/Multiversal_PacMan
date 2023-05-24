@@ -2,12 +2,7 @@ package src.editor.matachi.mapeditor.editor;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.util.List;
 import java.util.Properties;
 
@@ -31,6 +26,9 @@ import src.game.Game;
 import src.game.utility.GameCallback;
 import src.game.utility.PropertiesLoader;
 
+// import processbuilder
+import java.io.File;
+import java.nio.file.Path;
 /**
  * Controller of the application.
  * 
@@ -63,6 +61,7 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 	private CompositeLevelCheck levelCheckFunction = new  CompositeABCDLevelCheck();
 	private Properties properties;
 
+	private String propertiesPath;
 	/**
 	 * The instance of the controller.
 	 * Controller is a singleton
@@ -128,25 +127,32 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 			loadFile();
 		} else if (e.getActionCommand().equals("update")) {
 			updateGrid(gridWith, gridHeight);
-		} else if (e.getActionCommand().equals("start_game")) {
+		}else if (e.getActionCommand().equals("start_game")) {
 			if (currentFile != null && currentFile.exists() && currentFile.canRead()){
 				if (!levelCheckFunction.checkLevel(model, currentFile.getName())){
 					System.out.println(currentFile.getName() + " error: please refer to EditorErrorLog.txt.");
 					return;
 				}
-				SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
-					@Override
-					protected Void doInBackground() throws Exception {
-						GameCallback gameCallback = new GameCallback();
-						new Game(gameCallback, properties, currentFile);
-						return null;
-					}
-				};
-				worker.execute();
+				//String filePath = "pacman/testFolder/2sample_map.xml";
+				String filePath = currentFile.getPath();
+				String classPath = "out:out/lib/jdom-1.1.3.jar:out/lib/JGameGrid.jar";
+				String mainClass = "src.game.GameDriver";
+
+				ProcessBuilder process = new ProcessBuilder("java", "-cp", classPath, mainClass, propertiesPath, filePath);
+				process.redirectOutput(ProcessBuilder.Redirect.INHERIT);
+				process.redirectError(ProcessBuilder.Redirect.INHERIT);
+
+				try {
+					Process p = process.start();
+				} catch (IOException ex) {
+					throw new RuntimeException(ex);
+				}
+
 			}
 			else {
 				System.out.println("Only saved and loaded maps can be tested.");
 			}
+
 		}
 	}
 
@@ -340,6 +346,7 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 	}
 
 	public void setProperties(String propertiesPath) {
+		this.propertiesPath = propertiesPath;
 		this.properties = PropertiesLoader.loadPropertiesFile(propertiesPath);
 		//view.close();
 	}
@@ -348,11 +355,18 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 		return properties;
 	}
 
+	public String getPropertiesPath() {
+		return propertiesPath;
+	}
+
 	public Grid getModel() {
 		return model;
 	}
 
 	public void setCurrentFileNull(){
 		this.currentFile = null;
+	}
+	public void resetEditor() {
+		Controller.instance = null;
 	}
 }
