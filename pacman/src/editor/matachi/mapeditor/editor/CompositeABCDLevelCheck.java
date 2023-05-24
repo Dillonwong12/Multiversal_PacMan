@@ -1,8 +1,5 @@
 package src.editor.matachi.mapeditor.editor;
 
-import java.io.File;
-import java.util.Properties;
-
 public class CompositeABCDLevelCheck extends CompositeLevelCheck {
 
     public CompositeABCDLevelCheck() {

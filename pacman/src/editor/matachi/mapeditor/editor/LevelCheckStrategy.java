@@ -15,7 +15,5 @@ import java.util.Properties;
 
 public interface LevelCheckStrategy {
     // Function which checks if the level is valid based on their own rules
-    public abstract boolean checkLevel(Grid currentModel);
-
-
+    boolean checkLevel(Grid currentModel);
 }

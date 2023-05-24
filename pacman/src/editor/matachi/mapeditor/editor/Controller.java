@@ -57,7 +57,7 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 	private int gridWith = Constants.MAP_WIDTH;
 	private int gridHeight = Constants.MAP_HEIGHT;
 
-	private CompositeLevelCheck levelCheckFunction = new  CompositeABCDLevelCheck();
+	private CompositeLevelCheck levelCheckFunction = new CompositeABCDLevelCheck();
 
 	/**
 	 * Construct the controller.
