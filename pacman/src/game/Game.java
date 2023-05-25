@@ -35,8 +35,6 @@ public class Game extends GameGrid
   private GameCallback gameCallback;
   private Properties properties;
   private int seed = 30006;
-  private ArrayList<Location> propertyPillLocations = new ArrayList<>();
-  private ArrayList<Location> propertyGoldLocations = new ArrayList<>();
   private String gameVersion;
   private GameLoaderHandler gameLoaderHandler;
   private boolean isGameWon = false;
@@ -100,7 +98,7 @@ public class Game extends GameGrid
         }
       }
       hasPacmanEatAllPills = pacActor.getScore() >= maxScore;
-      delay(10);
+      delay(120);
     } while(!hasPacmanBeenHit && !hasPacmanEatAllPills);
     delay(10);
 
@@ -172,6 +170,7 @@ public class Game extends GameGrid
         gameCallback.pacManEatPillsAndItems(location, item.getType());
         item.hide();
         itemLocations.remove(loc);
+        pillAndItemLocations.remove(loc);
         break;
       }
     }
