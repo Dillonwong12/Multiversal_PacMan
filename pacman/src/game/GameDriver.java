@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.util.Properties;
 import java.net.ServerSocket;
 import java.net.Socket;
-// pacman/properties/test2.properties
-// pacman/testFolder/2sample_map.xml
 public class GameDriver {
     public static void main(String[] args) throws IOException, JDOMException {
         GameCallback gameCallback = new GameCallback();
@@ -21,7 +19,7 @@ public class GameDriver {
 
         Game game = new Game(gameCallback, properties, file);
 
-        // check if args[2] is not null as in if folder starting strategy called it
+        // Check if args[2] is not null, and send a result of the Game to the Editor
         if(args[2].equals("true")){
 
             Socket socket = new Socket("localhost", 65000);

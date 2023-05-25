@@ -18,8 +18,6 @@ public class LevelCheckD implements LevelCheckStrategy{
     ArrayList<Point> stack = new ArrayList<>();
     @Override
     public boolean checkLevel(Grid currentModel, String fileName) {
-        // Calculate the number of Gold and Pills
-        int goldAndPillCount = 0;
         int pacManX = 0;
         int pacManY = 0;
 
@@ -29,7 +27,6 @@ public class LevelCheckD implements LevelCheckStrategy{
 
                 // check if the tile is a gold or pill tile
                 if(cellValue == 'd' || cellValue == 'c'){
-                    goldAndPillCount++;
                     pillAndGoldLocations.add(new Point(x, y));
                 }
                 else if (cellValue == 'f'){

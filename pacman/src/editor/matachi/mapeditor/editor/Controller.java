@@ -125,6 +125,7 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 
 		} else if (e.getActionCommand().equals("load")) {
 			loadFile();
+			levelCheckFunction.checkLevel(model, currentFile.getName());
 		} else if (e.getActionCommand().equals("update")) {
 			updateGrid(gridWith, gridHeight);
 		}else if (e.getActionCommand().equals("start_game")) {
@@ -133,7 +134,6 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 					System.out.println(currentFile.getName() + " error: please refer to EditorErrorLog.txt.");
 					return;
 				}
-				//String filePath = "pacman/testFolder/2sample_map.xml";
 				String filePath = currentFile.getPath();
 				String classPath = "out:out/lib/jdom-1.1.3.jar:out/lib/JGameGrid.jar";
 				String mainClass = "src.game.GameDriver";
@@ -326,7 +326,6 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 						model.setTile(x, y, tileNr);
 					}
 				}
-
 				String mapString = model.getMapAsString();
 				grid.redrawGrid();
 				currentFile = selectedFile;

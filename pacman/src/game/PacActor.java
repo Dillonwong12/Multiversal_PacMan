@@ -21,10 +21,7 @@ public class PacActor extends Character implements GGKeyRepeatListener
   private int idSprite = 0;
   private int nbPills = 0;
   private int score = 0;
-
   private ArrayList<Location> pillAndGoldLocations = new ArrayList<>();
-  private List<String> propertyMoves = new ArrayList<>();
-  private int propertyMoveIndex = 0;
   private boolean isAuto = false;
   private AutoPlayerBuilder autoPlayerBuilder = new AutoPlayerBuilder();
 

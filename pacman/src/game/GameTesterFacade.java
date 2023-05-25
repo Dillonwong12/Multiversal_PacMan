@@ -15,7 +15,6 @@ public class GameTesterFacade {
     }
 
     public void testGame(String[] args) throws Exception{
-        Controller controller = Controller.getInstance();
         ArrayList<String> gameFiles = new ArrayList<>();
         CompositeGameCheck compositeABGameCheck = new CompositeABGameCheck();
         CompositeLevelCheck compositeABCDLevelCheck = new CompositeABCDLevelCheck();
@@ -26,11 +25,7 @@ public class GameTesterFacade {
                 gameFiles.add(files[i].getName());
             }
             // Game check
-            if (compositeABGameCheck.checkGame(gameFiles, directoryPath.getName())) {
-                System.out.println(compositeABGameCheck.getFormattedFiles());
-            } else {
-                System.out.println("check failed");
-                System.out.println(compositeABGameCheck.getFormattedFiles());
+            if (!compositeABGameCheck.checkGame(gameFiles, directoryPath.getName())) {
                 return;
             }
             int i = 0;
@@ -67,34 +62,26 @@ public class GameTesterFacade {
 
                         // get from game socket
                         won = in.readBoolean();
-                        System.out.println("won: " + won);
                         socket.close();
                         serverSocket.close();
                         // if we win
-                        if (won) {
+                        if (won && i < compositeABGameCheck.getFormattedFiles().size()-1) {
                             i++;
-                            continue;
                         }
                         else{
                             Controller.getInstance().resetEditor();
                             Controller.getInstance();
                             break;
                         }
-
-
                     } catch (IOException ex) {
                         throw new RuntimeException(ex);
                     }
-
                 }
-
             }
             // Return to edit mode with no current map
         }
         catch (Exception e){
             e.printStackTrace();
-        } finally {
-
         }
     }
 }

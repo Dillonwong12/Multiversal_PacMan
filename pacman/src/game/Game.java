@@ -174,9 +174,6 @@ public class Game extends GameGrid implements GGExitListener
     }
   }
 
-
-  //
-
   public int getNumHorzCells(){
     return this.NB_HORZ_CELLS;
   }

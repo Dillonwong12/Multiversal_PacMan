@@ -9,14 +9,6 @@ public class AutoPlayerBuilder {
     private AutoPlayerStrategy strategy;
     private Location targetLocation = null;
 
-    public AutoPlayerStrategy getMoveStrategy(){
-        return strategy;
-    }
-
-    public void setStrategy(AutoPlayerStrategy strategy) {
-        this.strategy = strategy;
-    }
-
     public AutoPlayer build(PacActor pacActor) {
         // Set the strategy here
         AutoPlayer autoPlayer = new BaseAutoPlayerStrategy(this, targetLocation);
@@ -35,6 +27,14 @@ public class AutoPlayerBuilder {
 
         autoPlayer.computeWeights();
         return autoPlayer;
+    }
+
+    public AutoPlayerStrategy getMoveStrategy(){
+        return strategy;
+    }
+
+    public void setStrategy(AutoPlayerStrategy strategy) {
+        this.strategy = strategy;
     }
 
     public void setTargetLocation(Location targetLocation) {
