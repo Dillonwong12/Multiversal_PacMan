@@ -1,5 +1,7 @@
 package src.game;
 
-public interface AutoPlayerStrategy extends AutoPlayer {
+import ch.aplu.jgamegrid.Location;
 
+public interface AutoPlayerStrategy extends AutoPlayer {
+    Location moveInAutoMode(PacActor pacActor);
 }

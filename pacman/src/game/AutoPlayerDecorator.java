@@ -17,9 +17,4 @@ public class AutoPlayerDecorator implements AutoPlayer{
     public void computeWeights() {
         decoratedAutoPlayer.computeWeights();
     }
-
-    @Override
-    public Location moveInAutoMode(PacActor pacActor) {
-        return decoratedAutoPlayer.moveInAutoMode(pacActor);
-    }
 }

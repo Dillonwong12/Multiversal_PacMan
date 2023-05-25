@@ -27,7 +27,6 @@ public class BaseAutoPlayerStrategy implements AutoPlayerStrategy{
         }
         else {
             targetLocation = closestPillLocation(pacActor.getGame().getPillAndItemLocations(), pacActor.getLocation());
-            System.out.println(targetLocation);
             builder.setTargetLocation(targetLocation);
         }
         ArrayList<Location> candidates = getNextMoves(pacActor, targetLocation);

@@ -11,14 +11,18 @@ public class AutoPlayerBuilder {
 
     private Location targetLocation = null;
 
-    public AutoPlayerBuilder setStrategy(AutoPlayerStrategy strategy) {
+    public AutoPlayerStrategy getMoveStrategy(){
+        return strategy;
+    }
+
+    public void setStrategy(AutoPlayerStrategy strategy) {
         this.strategy = strategy;
-        return this;
     }
 
     public AutoPlayer build(PacActor pacActor) {
         // Set the strategy here
         AutoPlayer autoPlayer = new BaseAutoPlayerStrategy(this, targetLocation);
+        setStrategy((AutoPlayerStrategy) autoPlayer);
         ArrayList<Location> neighbours = autoPlayer.getNeighbourhood(pacActor);
 
         for (Location location : neighbours) {

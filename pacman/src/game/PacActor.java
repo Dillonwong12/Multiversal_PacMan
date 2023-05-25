@@ -84,7 +84,7 @@ public class PacActor extends Character implements GGKeyRepeatListener
 
     if (isAuto) {
       AutoPlayer autoPlayer = autoPlayerBuilder.build(this);
-      Location next = autoPlayer.moveInAutoMode(this);
+      Location next = autoPlayerBuilder.getMoveStrategy().moveInAutoMode(this);
       setDirection(getLocation().get4CompassDirectionTo(next));
       setLocation(next);
       eatItem(next);

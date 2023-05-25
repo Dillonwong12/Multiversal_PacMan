@@ -9,8 +9,6 @@ public interface AutoPlayer {
 
     void computeWeights();
 
-    Location moveInAutoMode(PacActor pacActor);
-
     default HashMap<java.lang.Character, Integer> getTilesMap(){
         return this.tilesMap;
     }
