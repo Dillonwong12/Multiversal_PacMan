@@ -3,7 +3,7 @@ package src.editor.matachi.mapeditor.editor;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public class CompositeGameCheck implements GameCheckStrategy {
+public abstract class CompositeGameCheck implements GameCheckStrategy {
     private ArrayList<GameCheckStrategy> gameChecks = new ArrayList<>();
     private final ArrayList<String> formattedFiles = new ArrayList<>();
 
