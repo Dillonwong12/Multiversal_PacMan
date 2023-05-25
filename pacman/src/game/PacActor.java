@@ -12,7 +12,6 @@ import ch.aplu.jgamegrid.Location;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class PacActor extends Character implements GGKeyRepeatListener
@@ -24,15 +23,10 @@ public class PacActor extends Character implements GGKeyRepeatListener
   private int score = 0;
 
   private ArrayList<Location> pillAndGoldLocations = new ArrayList<>();
-  private Location targetLocation = null;
-
   private List<String> propertyMoves = new ArrayList<>();
   private int propertyMoveIndex = 0;
   private boolean isAuto = false;
-
-  private int prevAngle = 90;
-  private int sign = 1;
-  private int turns = 0;
+  private AutoPlayerBuilder autoPlayerBuilder = new AutoPlayerBuilder();
 
   public PacActor(Game game)
   {
@@ -89,84 +83,16 @@ public class PacActor extends Character implements GGKeyRepeatListener
       idSprite = 0;
 
     if (isAuto) {
-      moveInAutoMode();
+      AutoPlayer autoPlayer = autoPlayerBuilder.build(this);
+      Location next = autoPlayerBuilder.getMoveStrategy().moveInAutoMode(this);
+      setDirection(getLocation().get4CompassDirectionTo(next));
+      setLocation(next);
+      eatItem(next);
+      addVisitedList(next);
     }
     this.getGame().getGameCallback().pacManLocationChanged(getLocation(), score, nbPills);
   }
 
-  /**
-   * Finds and returns the Location closest
-   * @return currentLocation The Location closest to an Item
-   */
-  private Location closestPillLocation() {
-    int currentDistance = 1000;
-    Location currentLocation = null;
-    for (Location location: pillAndGoldLocations) {
-      int distanceToPill = location.getDistanceTo(getLocation());
-      if (distanceToPill < currentDistance) {
-        currentLocation = location;
-        currentDistance = distanceToPill;
-      }
-    }
-    return currentLocation;
-  }
-
-  /**
-   * First moves PacActor according to the moves specified in `propertyMoves`. Once there are no more moves to follow
-   * from `propertyMoves`, attempts to walk towards the next `closestPill`.
-   */
-  private void moveInAutoMode() {
-    ArrayList<Location> neighbourhood = getNeighbourhood();
-    ArrayList<Location> candidates = new ArrayList<>();
-    double oldDirection = getDirection();
-
-    for (Location loc : neighbourhood){
-      Color c = getBackground().getColor(loc);
-      if (canMove(loc) && (c.equals(Gold.GOLD_COLOR) || c.equals(Pill.PILL_COLOR))){
-        candidates.add(loc);
-      }
-    }
-    for (Location loc : neighbourhood){
-      Color c = getBackground().getColor(loc);
-      if (canMove(loc) && (c.equals(Ice.ICE_COLOR))){
-        candidates.add(loc);
-      }
-    }
-    if (candidates.size() > 0){
-      Location loc = candidates.get(0);
-      setDirection(getLocation().get4CompassDirectionTo(loc));
-      setLocation(loc);
-      eatItem(loc);
-      addVisitedList(loc);
-      return;
-    }
-
-
-    int angles[] = {sign*90, 0, -sign*90, 180};
-    Location next = getNextMoveLocation();
-    for (int angle : angles){
-      setDirection(oldDirection);
-      turn(angle);
-      next = getNextMoveLocation();
-      if (canMove(next)){
-        if (Math.abs(angle) == 90){
-          if (angle == prevAngle){
-            turns++;
-          }
-          prevAngle = angle;
-        }
-        if (turns >= 4){
-          sign *= -1;
-          turns = 0;
-        }
-        break;
-      }
-    }
-
-    setLocation(next);
-    eatItem(next);
-    addVisitedList(next);
-  }
 
   /***
    * PacActor eats an Item at the specified `location`. This removes the Item from the grid, increments `score` &
@@ -219,59 +145,6 @@ public class PacActor extends Character implements GGKeyRepeatListener
 
   public void setPillAndGoldLocations(ArrayList<Location> itemLocations){
     pillAndGoldLocations.addAll(itemLocations);
-  }
-
-  /**
-   * gets all the 8 neighbours iteratively and checks if they are a valid move
-   * @return an ArrayList of all the valid neighbours
-   */
-  public ArrayList<Location> getNeighbourhood() {
-    int x = getX();
-    int y = getY();
-    ArrayList<Location> neighbourhood = new ArrayList<>();
-    for (int i = -1; i <= 1; i++) {
-      for (int j = -1; j <= 1; j++) {
-        if (Math.abs(i) == Math.abs(j)){
-          continue;
-        }
-        Location location = new Location(x + i, y + j);
-        // Exclude The Current Location
-        if (canMove(location)) {
-          neighbourhood.add(location);
-        }
-      }
-    }
-    return neighbourhood;
-  }
-
-
-
-  /**
-   * Gets the next best move based on shortest distance to the target location
-   * @param targetLocation the target that we want to move to
-   * @return an ArrayList of the best moves based on distance to the target
-   */
-  public ArrayList<Location> getNextMoves(Location targetLocation) {
-    ArrayList<Location> candidates = new ArrayList<>();
-    double shortestDistance = Double.MAX_VALUE;
-
-    // Check Each Neighbor Location
-    for (Location neighbor : getNeighbourhood()) {
-
-      // Check For Walls
-      double distance = neighbor.getDistanceTo(targetLocation);
-
-      if (distance < shortestDistance) {
-        candidates.clear();
-        candidates.add(neighbor);
-        shortestDistance = distance;
-
-      } else if (distance == shortestDistance) {
-        candidates.add(neighbor);
-      }
-    }
-
-    return candidates;
   }
 
 }
