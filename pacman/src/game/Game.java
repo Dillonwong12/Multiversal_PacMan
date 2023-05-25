@@ -96,9 +96,9 @@ public class Game extends GameGrid implements GGExitListener
         }
       }
       hasPacmanEatAllPills = pacActor.getScore() >= maxScore;
-      delay(120);
+      delay(10);
     } while(!hasPacmanBeenHit && !hasPacmanEatAllPills);
-    delay(10);
+    delay(120);
 
     Location loc = pacActor.getLocation();
     setMonstersStopMove(true);

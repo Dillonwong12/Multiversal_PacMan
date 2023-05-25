@@ -7,8 +7,6 @@ import ch.aplu.jgamegrid.Location;
 
 public class AutoPlayerBuilder {
     private AutoPlayerStrategy strategy;
-    private ArrayList<AutoPlayerDecorator> decorators = new ArrayList<>();
-
     private Location targetLocation = null;
 
     public AutoPlayerStrategy getMoveStrategy(){

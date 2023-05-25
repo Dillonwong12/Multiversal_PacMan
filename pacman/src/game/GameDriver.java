@@ -14,7 +14,6 @@ import java.net.Socket;
 // pacman/testFolder/2sample_map.xml
 public class GameDriver {
     public static void main(String[] args) throws IOException, JDOMException {
-        System.out.println("driver hello how low");
         GameCallback gameCallback = new GameCallback();
 
         Properties properties = PropertiesLoader.loadPropertiesFile(args[0]);
@@ -25,7 +24,7 @@ public class GameDriver {
         // check if args[2] is not null as in if folder starting strategy called it
         if(args[2].equals("true")){
 
-            Socket socket = new Socket("localhost", 8000);
+            Socket socket = new Socket("localhost", 65000);
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 
             boolean value = game.isGameWon();

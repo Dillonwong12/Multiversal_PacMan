@@ -57,7 +57,7 @@ public class BaseAutoPlayerStrategy implements AutoPlayerStrategy{
      * @param targetLocation the target that we want to move to
      * @return an ArrayList of the best moves based on distance to the target
      */
-    public ArrayList<Location> getNextMoves(PacActor pacActor, Location targetLocation) {
+    private ArrayList<Location> getNextMoves(PacActor pacActor, Location targetLocation) {
         ArrayList<Location> candidates = new ArrayList<>();
         double shortestDistance = Double.MAX_VALUE;
 

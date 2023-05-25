@@ -34,17 +34,24 @@ public class GameTesterFacade {
                 return;
             }
             int i = 0;
-            while (i < files.length) {
+            while (i < compositeABGameCheck.getFormattedFiles().size()) {
+                File selectedFile = null;
                 boolean finished = false;
                 boolean won = false;
-                if (compositeABGameCheck.getFormattedFiles().contains(files[i].getName())) {
-                    Controller.getInstance().loadSelectedFile(files[i]);
-                    if (!compositeABCDLevelCheck.checkLevel(Controller.getInstance().getModel(), files[i].getName())) {
-                        System.out.println(files[i].getName() + " error: please refer to log file.");
+                for (File file: files){
+                    if (file.getName().equals(compositeABGameCheck.getFormattedFiles().get(i))){
+                        selectedFile = file;
+                        break;
+                    }
+                }
+                if (selectedFile != null) {
+                    Controller.getInstance().loadSelectedFile(selectedFile);
+                    if (!compositeABCDLevelCheck.checkLevel(Controller.getInstance().getModel(), selectedFile.getName())) {
+                        System.out.println(selectedFile.getName() + " error: please refer to log file.");
                         break;
                     }
 
-                    String filePath = files[i].getPath();
+                    String filePath = selectedFile.getPath();
                     String classPath = "out:out/lib/jdom-1.1.3.jar:out/lib/JGameGrid.jar";
                     String mainClass = "src.game.GameDriver";
 
@@ -54,7 +61,7 @@ public class GameTesterFacade {
 
                     try {
                         Process p = process.start();
-                        ServerSocket serverSocket = new ServerSocket(8000);
+                        ServerSocket serverSocket = new ServerSocket(65000);
                         Socket socket = serverSocket.accept();
                         DataInputStream in = new DataInputStream(socket.getInputStream());
 
