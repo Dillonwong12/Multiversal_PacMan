@@ -4,15 +4,15 @@ import src.editor.matachi.mapeditor.grid.Grid;
 
 import java.util.ArrayList;
 
-public abstract class CompositeLevelCheck implements LevelCheckStrategy{
-    private ArrayList<LevelCheckStrategy> levelChecks = new ArrayList<LevelCheckStrategy>();
+public abstract class CompositeLevelCheck implements LevelCheck {
+    private ArrayList<LevelCheck> levelChecks = new ArrayList<LevelCheck>();
 
-    public void addLevelCheck(LevelCheckStrategy levelCheck){
+    public void addLevelCheck(LevelCheck levelCheck){
         levelChecks.add(levelCheck);
     }
     @Override
     public boolean checkLevel(Grid currentModel, String fileName)  {
-        for(LevelCheckStrategy levelCheck : levelChecks){
+        for(LevelCheck levelCheck : levelChecks){
             if(!levelCheck.checkLevel(currentModel, fileName)){
                 return false;
             }

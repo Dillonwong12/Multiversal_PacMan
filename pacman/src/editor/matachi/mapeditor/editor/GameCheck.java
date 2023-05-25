@@ -2,7 +2,7 @@ package src.editor.matachi.mapeditor.editor;
 
 import java.util.ArrayList;
 
-public interface GameCheckStrategy {
+public interface GameCheck {
 
     default String getNumericPrefix(String filename) {
         StringBuilder numericPrefix = new StringBuilder();

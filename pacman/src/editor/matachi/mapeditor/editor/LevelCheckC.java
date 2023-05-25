@@ -1,9 +1,8 @@
 package src.editor.matachi.mapeditor.editor;
 
 import src.editor.matachi.mapeditor.grid.Grid;
-import src.editor.matachi.mapeditor.grid.GridModel;
 
-public class LevelCheckC implements LevelCheckStrategy {
+public class LevelCheckC implements LevelCheck {
 
     @Override
     public boolean checkLevel(Grid currentModel, String fileName) {

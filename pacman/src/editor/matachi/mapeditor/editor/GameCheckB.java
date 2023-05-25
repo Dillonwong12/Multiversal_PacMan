@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class GameCheckB implements GameCheckStrategy {
+public class GameCheckB implements GameCheck {
     @Override
     public boolean checkGame(ArrayList<String> formattedFiles, String directoryName) {
         HashMap<String, ArrayList<String>> prefixesMap = new HashMap<>();

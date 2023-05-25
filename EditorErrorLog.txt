@@ -1,1 +1,2 @@
-[Game testFolder – no maps found]
+[Level 5map_level.xml – more than one start for Pacman:  (7, 4); (11, 4)]
+[Level 5map_level.xml – more than one start for Pacman:  (7, 4); (11, 4)]

@@ -3,18 +3,18 @@ package src.editor.matachi.mapeditor.editor;
 import java.util.ArrayList;
 import java.util.Collections;
 
-public abstract class CompositeGameCheck implements GameCheckStrategy {
-    private ArrayList<GameCheckStrategy> gameChecks = new ArrayList<>();
+public abstract class CompositeGameCheck implements GameCheck {
+    private ArrayList<GameCheck> gameChecks = new ArrayList<>();
     private final ArrayList<String> formattedFiles = new ArrayList<>();
 
-    public void addGameCheck(GameCheckStrategy gameCheckStrategy){
-        gameChecks.add(gameCheckStrategy);
+    public void addGameCheck(GameCheck gameCheck){
+        gameChecks.add(gameCheck);
     }
 
     public boolean checkGame(ArrayList<String> gameFiles, String directoryName){
         extractFormattedFiles(gameFiles);
-        for(GameCheckStrategy gameCheckStrategy : gameChecks){
-            if (!gameCheckStrategy.checkGame(getFormattedFiles(), directoryName)){
+        for(GameCheck gameCheck : gameChecks){
+            if (!gameCheck.checkGame(getFormattedFiles(), directoryName)){
                 return false;
             }
         }

@@ -58,7 +58,7 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 	private File currentFile = null;
 
 
-	private CompositeLevelCheck levelCheckFunction = new  CompositeABCDLevelCheck();
+	private CompositeLevelCheck levelCheckFunction = new CompositeABCDLevelCheck();
 	private Properties properties;
 
 	private String propertiesPath;

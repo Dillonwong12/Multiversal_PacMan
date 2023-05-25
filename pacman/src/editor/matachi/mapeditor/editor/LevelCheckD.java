@@ -1,19 +1,12 @@
 package src.editor.matachi.mapeditor.editor;
 
-import org.jdom.JDOMException;
 import src.editor.matachi.mapeditor.grid.Grid;
-import src.editor.matachi.mapeditor.grid.GridModel;
 
-import java.io.File;
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Properties;
-import java.util.List;
 import java.awt.Point;
 
 // Check that items are accessible relative to pacman starting location
-public class LevelCheckD implements LevelCheckStrategy{
+public class LevelCheckD implements LevelCheck {
     ArrayList<Point> pillAndGoldLocations = new ArrayList<>();
     ArrayList<Point> stack = new ArrayList<>();
     @Override

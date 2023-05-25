@@ -1,15 +1,9 @@
 package src.editor.matachi.mapeditor.editor;
 
-import org.jdom.JDOMException;
-import org.jdom.Element;
 import src.editor.matachi.mapeditor.grid.Grid;
-import src.editor.matachi.mapeditor.grid.GridModel;
 
-import java.io.File;
-import java.util.List;
-import java.io.IOException;
 import java.util.HashMap;
-public class LevelCheckB implements LevelCheckStrategy {
+public class LevelCheckB implements LevelCheck {
 
     @Override
     public boolean checkLevel(Grid currentModel, String fileName) {

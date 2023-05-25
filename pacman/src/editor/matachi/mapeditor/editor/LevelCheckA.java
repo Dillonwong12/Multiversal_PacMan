@@ -1,18 +1,8 @@
 package src.editor.matachi.mapeditor.editor;
 
-import org.jdom.Document;
-import org.jdom.Element;
-import org.jdom.JDOMException;
-import org.jdom.input.SAXBuilder;
 import src.editor.matachi.mapeditor.grid.Grid;
-import src.editor.matachi.mapeditor.grid.GridModel;
 
-import javax.swing.*;
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
-
-public class LevelCheckA implements LevelCheckStrategy{
+public class LevelCheckA implements LevelCheck {
     @Override
     public boolean checkLevel(Grid currentModel, String fileName) {
         int pacmanCount = 0;
