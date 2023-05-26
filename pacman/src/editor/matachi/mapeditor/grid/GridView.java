@@ -25,7 +25,7 @@ public class GridView extends JPanel implements PropertyChangeListener {
 	private static final long serialVersionUID = -345930170664066299L;
 	
 	/**
-	 * A reference to the model. Needed to query data.
+	 * A reference to the model. Needed to query sprites.data.
 	 */
 	private Camera camera;
 	

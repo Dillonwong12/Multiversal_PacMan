@@ -23,7 +23,7 @@ public class CameraInformationLabel extends JLabel implements PropertyChangeList
 	
 	/**
 	 * A label that shows information about a Camera.
-	 * @param camera The camera that the label should get data from.
+	 * @param camera The camera that the label should get sprites.data from.
 	 */
 	public CameraInformationLabel(Camera camera) {
 		this.camera = camera;

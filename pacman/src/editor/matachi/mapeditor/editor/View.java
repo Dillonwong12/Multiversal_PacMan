@@ -107,7 +107,6 @@ public class View {
 		JLabel lblHeight = new JLabel("Height(min:20):");
 
 		txtWidth = new JTextField(Constants.MAP_WIDTH + "", 3);
-		txtWidth.getDocument().addDocumentListener(controller.updateSizeFields);
 		txtWidth.setEnabled(false);
 		txtHeight = new JTextField(Constants.MAP_HEIGHT + "", 3);
 		txtHeight.getDocument()

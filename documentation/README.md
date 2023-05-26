@@ -29,4 +29,4 @@ PacMan in the TorusVerse
 - - Changed DEFAULT_PROPERTIES_PATH to "pacman/properties/test2.properties"
 
 - In pacman -> editor -> editor -> "Controller.java" file:
-- - Changed TileManager.getTilesFromFolder() to "pacman/data/";
+- - Changed TileManager.getTilesFromFolder() to "pacman/sprites.data/";

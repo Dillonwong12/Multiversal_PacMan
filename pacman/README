@@ -14,7 +14,7 @@ How to use the application
 	
 How to add additional tiles to the application
 
-	Put your additional image files into the data folder and restart the
+	Put your additional image files into the sprites.data folder and restart the
 	application. Then they should appear by themselves in the app.
 
 

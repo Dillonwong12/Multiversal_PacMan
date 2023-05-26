@@ -114,7 +114,7 @@ public class GridModel implements Grid {
 		int widthTmpMap = getHeight() + northOffset + southOffset;
 		tmpMap = createEmptyMap(heightTmpMap, widthTmpMap);
 
-		// Copy the old map's data to the new one.
+		// Copy the old map's sprites.data to the new one.
 		for (int y = 0; y < map.length; y++) {
 			for (int x = 0; x < map[0].length; x++) {
 				tmpMap[y + northOffset][x + westOffset] = map[y][x];
