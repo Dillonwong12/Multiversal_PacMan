@@ -3,14 +3,6 @@ package src.editor.matachi.mapeditor.editor;
 import java.util.Arrays;
 
 public class EditorStartingStrategyFactory {
-    private static EditorStartingStrategyFactory instance;
-
-    public static EditorStartingStrategyFactory getInstance() {
-        if (instance == null) {
-            instance = new EditorStartingStrategyFactory();
-        }
-        return instance;
-    }
 
     public StartingStrategy getStartingStrategy(String[] argsEditor) {
         StartingStrategy startingStrategy = null;

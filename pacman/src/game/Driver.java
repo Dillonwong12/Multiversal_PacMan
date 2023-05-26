@@ -20,8 +20,9 @@ public class Driver {
     private static String[] argsEditor;
     public static void main(String[] args) throws Exception {
         Controller.getInstance().setProperties(DEFAULT_PROPERTIES_PATH);
+        EditorStartingStrategyFactory startingStrategyFactory = new EditorStartingStrategyFactory();
         argsEditor = args;
-        EditorStartingStrategyFactory.getInstance().getStartingStrategy(argsEditor).startEditor(argsEditor);
+        startingStrategyFactory.getStartingStrategy(argsEditor).startEditor(argsEditor);
     }
 
     public String[] getArgs() {
