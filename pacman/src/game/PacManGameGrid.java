@@ -1,6 +1,12 @@
 // PacGrid.java
 package src.game;
 
+/**
+ *   1173104 Erick Wong (erickw@student.unimelb.edu.au)
+ *   1236449 Dillon Han Ren Wong (dillonhanren@student.unimelb.edu.au)
+ *   1272545 Jonathan Linardi (linardij@student.unimelb.edu.au)
+ */
+
 import ch.aplu.jgamegrid.Location;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -67,6 +73,13 @@ public class PacManGameGrid
     return ids.indexOf(c);
   }
 
+  /**
+   * Converts an `XMLMap` to a String representation of a map
+   * @param XMLMap the XML File
+   * @return a String representation of the map
+   * @throws IOException
+   * @throws JDOMException
+   */
   private String XMLToMaze(File XMLMap) throws IOException, JDOMException {
     String maze = "";
 
@@ -88,6 +101,11 @@ public class PacManGameGrid
     return maze;
   }
 
+  /**
+   * Returns a Character which represents a `cellValue`
+   * @param cellValue a String describing the tile
+   * @return A Character which represents the `cellValue` uniquely
+   */
   private char getCellMapping(String cellValue) {
     switch (cellValue) {
       case "WallTile":
@@ -117,9 +135,4 @@ public class PacManGameGrid
     }
     return '0';
   }
-
-
-
-
-
 }

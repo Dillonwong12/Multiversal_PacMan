@@ -1,9 +1,11 @@
 package src.editor.matachi.mapeditor.editor;
 
-//  [Tue 09:00] Team 03
-//  1173104 Erick Wong (erickw@student.unimelb.edu.au)
-//  1236449 Dillon Han Ren Wong (dillonhanren@student.unimelb.edu.au)
-//  1272545 Jonathan Linardi (linardij@student.unimelb.edu.au)
+/**
+ * Modified to be a Singleton, support map testing with the 'start_game' button, and load `Files` given a `File`.
+ *   1173104 Erick Wong (erickw@student.unimelb.edu.au)
+ *   1236449 Dillon Han Ren Wong (dillonhanren@student.unimelb.edu.au)
+ *   1272545 Jonathan Linardi (linardij@student.unimelb.edu.au)
+ */
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -62,23 +64,19 @@ public class Controller  implements ActionListener, GUIInformation {
 
 	private File currentFile = null;
 
-	/**
-	 * Attribute which stores the composite level check that we will perform on every map
-	 */
+
+	// Attribute which stores the composite level check that we will perform on every map
 	private CompositeLevelCheck levelCheckFunction = new CompositeABCDLevelCheck();
 	private Properties properties;
 
 	private String propertiesPath;
-	/**
-	 * The instance of the controller.
-	 * Controller is a singleton
-	 */
+
+	// Controller is a Singleton
 	private static Controller instance = null;
 
 
 	/**
 	 * Singleton constructor
-	 * Construct the controller.
 	 */
 	private Controller() {
 		init(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
@@ -87,7 +85,7 @@ public class Controller  implements ActionListener, GUIInformation {
 
 	/**
 	 * Returns the single instance of the Controller class.
-	 * Instantiates the controller if it has not been created
+	 * Instantiates the controller if it has not been created.
 	 */
 	public static Controller getInstance() {
 		if (instance == null) {
@@ -110,7 +108,7 @@ public class Controller  implements ActionListener, GUIInformation {
 	}
 
 	/**
-	 * Different commands that comes from the view.
+	 * Different commands that come from the `View`.
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -133,15 +131,13 @@ public class Controller  implements ActionListener, GUIInformation {
 		} else if (e.getActionCommand().equals("update")) {
 			updateGrid(gridWith, gridHeight);
 		}else if (e.getActionCommand().equals("start_game")) {
-			/**
-			 * if start_game button is pressed
-			 */
+			// if start_game button is pressed
 			if (currentFile != null && currentFile.exists() && currentFile.canRead()){
 				if (!levelCheckFunction.checkLevel(model, currentFile.getName())){
 					System.out.println(currentFile.getName() + " error: please refer to log file.");
 					return;
 				}
-
+				// Run Test Mode for a file if it passes all `LevelCheck`s and has been saved or loaded
 				String filePath = currentFile.getPath();
 				String pathSeparator = System.getProperty("path.separator");
 				String classPath = "out" + pathSeparator + "out/lib/jdom-1.1.3.jar" + pathSeparator + "out/lib/JGameGrid.jar";
@@ -156,11 +152,6 @@ public class Controller  implements ActionListener, GUIInformation {
 				} catch (IOException ex) {
 					throw new RuntimeException(ex);
 				}
-
-				System.out.println("Bout to run process");
-				System.out.println("filepath is " + filePath);
-				System.out.println("properties path is " + propertiesPath);
-
 			}
 			else {
 				System.out.println("Only saved and loaded maps can be tested.");
@@ -264,6 +255,9 @@ public class Controller  implements ActionListener, GUIInformation {
 		}
 	}
 
+	/**
+	 * Loads a `File` with `JFileChooser` into the Editor
+	 */
 	public void loadFile() {
 		try {
 			JFileChooser chooser = new JFileChooser();
@@ -283,6 +277,10 @@ public class Controller  implements ActionListener, GUIInformation {
 		}
 	}
 
+	/**
+	 * Loads a `File` into the Editor
+	 * @param selectedFile the `File` to load
+	 */
 	public void loadSelectedFile(File selectedFile){
 		SAXBuilder builder = new SAXBuilder();
 		try {
@@ -379,14 +377,14 @@ public class Controller  implements ActionListener, GUIInformation {
 	}
 
 	/**
-	 * Function to se the current file as null
+	 * Sets the `currentFile` to null
 	 */
 	public void setCurrentFileNull(){
 		this.currentFile = null;
 	}
 
 	/**
-	 * Function empty and clear the editor
+	 * Empties and clears the Editor
 	 */
 	public void resetEditor() {
 		Controller.instance = null;

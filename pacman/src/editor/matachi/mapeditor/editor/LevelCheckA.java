@@ -1,22 +1,21 @@
 package src.editor.matachi.mapeditor.editor;
 
-//  [Tue 09:00] Team 03
-//  1173104 Erick Wong (erickw@student.unimelb.edu.au)
-//  1236449 Dillon Han Ren Wong (dillonhanren@student.unimelb.edu.au)
-//  1272545 Jonathan Linardi (linardij@student.unimelb.edu.au)
+/**
+ * Leaf class for checking levels with the Composite Pattern. Checks that there exactly one starting point for
+ * `PacActor`.
+ *   1173104 Erick Wong (erickw@student.unimelb.edu.au)
+ *   1236449 Dillon Han Ren Wong (dillonhanren@student.unimelb.edu.au)
+ *   1272545 Jonathan Linardi (linardij@student.unimelb.edu.au)
+ */
 
 import src.editor.matachi.mapeditor.grid.Grid;
 
-/**
- * Singular level check Class which implements LevelCheck interface and checks whether a given map/grid passes level check A
- * Level CheckA: exactly one starting point for PacMan
- */
 public class LevelCheckA implements LevelCheck {
     /**
-     * Checks if there are only 2 starting point for pacman
-     * @param currentModel current map
-     * @param fileName filename which contains the current map
-     * @return true if it passes level check A or false if it fails
+     * Checks if there is exactly one starting point for `PacActor`.
+     * @param currentModel Grid representation of the map
+     * @param fileName File name
+     * @return true if there is exactly one starting point for `PacActor`, false otherwise
      */
     @Override
     public boolean checkLevel(Grid currentModel, String fileName) {
@@ -26,6 +25,7 @@ public class LevelCheckA implements LevelCheck {
         int height = currentModel.getHeight();
         int width = currentModel.getWidth();
 
+        // Scan for starting points
         for(int y = 0; y < height; y++){
             for(int x = 0; x < width; x++){
                 char tileChar = currentModel.getTile(x, y);

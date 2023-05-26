@@ -1,5 +1,12 @@
 package src.game;
 
+/**
+ * Loads Games
+ *   1173104 Erick Wong (erickw@student.unimelb.edu.au)
+ *   1236449 Dillon Han Ren Wong (dillonhanren@student.unimelb.edu.au)
+ *   1272545 Jonathan Linardi (linardij@student.unimelb.edu.au)
+ */
+
 import ch.aplu.jgamegrid.Location;
 
 import java.util.Properties;
@@ -53,7 +60,6 @@ public class GameLoaderHandler {
                     game.getPillAndItemLocations().add(location);
                 }
                 else if (a == 8) {
-                    System.out.println("white portal");
                     Portal portal = new Portal("pacman/sprites/resizedImages/i_portalWhiteTileResized.png");
                     game.getItemLocations().put(location, portal);
                     if (whitePortal == null){

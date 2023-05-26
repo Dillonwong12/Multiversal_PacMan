@@ -1,2 +1,1 @@
-[Level 6map_level.xml portal White count is not 2: (16, 5)]
-[Level 6map_level.xml portal White count is not 2: (16, 5)]
+[Game testFolder – no maps found]

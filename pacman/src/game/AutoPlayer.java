@@ -1,12 +1,24 @@
 package src.game;
+
+/**
+ * Interface for the `AutoPlayer`, defining weight computation for different `Tiles`
+ *   1173104 Erick Wong (erickw@student.unimelb.edu.au)
+ *   1236449 Dillon Han Ren Wong (dillonhanren@student.unimelb.edu.au)
+ *   1272545 Jonathan Linardi (linardij@student.unimelb.edu.au)
+ */
+
 import ch.aplu.jgamegrid.Location;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public interface AutoPlayer {
+    // A HashMap of Characters representing tiles to their weight values
     HashMap<java.lang.Character, Integer> tilesMap = new HashMap<>();
 
+    /**
+     * Updates `tilesMap` based on the presence of different tiles within the 4 adjacent Locations to `PacActor`.
+     */
     void computeWeights();
 
     default HashMap<java.lang.Character, Integer> getTilesMap(){
@@ -14,8 +26,8 @@ public interface AutoPlayer {
     }
 
     /**
-     * gets all the 4 neighbours iteratively
-     * @return an ArrayList of all the valid neighbours
+     * Gets all the 4 neighbouring `Location`s iteratively.
+     * @return An ArrayList of all the valid neighbours
      */
     default ArrayList<Location> getNeighbourhood(PacActor pacActor) {
         int x = pacActor.getX();
@@ -28,7 +40,6 @@ public interface AutoPlayer {
                     continue;
                 }
 
-                // Exclude The Current Location
                 neighbourhood.add(location);
             }
         }
@@ -36,8 +47,8 @@ public interface AutoPlayer {
     }
 
     /**
-     * Finds and returns the Location closest
-     * @return currentLocation The Location closest to an Item
+     * Finds and returns the closest `Pill` or `Gold` `Location`.
+     * @return currentLocation The `Location` closest to a `Pill` or `Gold`
      */
     default Location closestPillLocation(ArrayList<Location> pillAndGoldLocations, Location init) {
         int currentDistance = 1000;

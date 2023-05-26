@@ -1,28 +1,27 @@
 package src.editor.matachi.mapeditor.editor;
 
-//  [Tue 09:00] Team 03
-//  1173104 Erick Wong (erickw@student.unimelb.edu.au)
-//  1236449 Dillon Han Ren Wong (dillonhanren@student.unimelb.edu.au)
-//  1272545 Jonathan Linardi (linardij@student.unimelb.edu.au)
+/**
+ * Leaf class for checking levels with the Composite Pattern. Checks that each Gold and Pill is accessible to `PacActor`
+ * from the starting point, ignoring `Monsters` but accounting for valid `Portals`.
+ *   1173104 Erick Wong (erickw@student.unimelb.edu.au)
+ *   1236449 Dillon Han Ren Wong (dillonhanren@student.unimelb.edu.au)
+ *   1272545 Jonathan Linardi (linardij@student.unimelb.edu.au)
+ */
 
 import src.editor.matachi.mapeditor.grid.Grid;
 
 import java.util.ArrayList;
 import java.awt.Point;
 
-/**
- * Singular level check class which implements the LevelCheck Interface, checks whether a given map passes Level Check D
- * Level Check D: Check that items are accessible relative to pacman starting location.
- */
 public class LevelCheckD implements LevelCheck {
     ArrayList<Point> pillAndGoldLocations = new ArrayList<>();
     ArrayList<Point> stack = new ArrayList<>();
 
     /**
-     * Checks that the all items are access
-     * @param currentModel
-     * @param fileName
-     * @return
+     * Checks that each Gold and Pill is accessible to `PacActor`
+     * @param currentModel Grid representation of the map
+     * @param fileName File name
+     * @return true if each Gold and Pill is accessible to `PacActor`, false otherwise
      */
     @Override
     public boolean checkLevel(Grid currentModel, String fileName) {
@@ -33,7 +32,7 @@ public class LevelCheckD implements LevelCheck {
             for(int x = 0; x < currentModel.getWidth(); x++){
                 char cellValue = currentModel.getTile(x, y);
 
-                // check if the tile is a gold or pill tile
+                // Check if the tile is a gold or pill tile
                 if(cellValue == 'd' || cellValue == 'c'){
                     pillAndGoldLocations.add(new Point(x, y));
                 }
@@ -43,10 +42,12 @@ public class LevelCheckD implements LevelCheck {
                 }
             }
         }
-
+        // Uses DFS to constantly keep track of the number of accessible `Gold` and `Pills`. If this is ever
+        // equal to the number of `pillAndGoldLocations`, the check has passed.
         if (DFS(currentModel, new Point(pacManX, pacManY))){
             return true;
         }
+        // Format ErrorLogger strings
         String inaccessiblePills = "";
         String inaccessibleGold = "";
         for (Point p : pillAndGoldLocations){
@@ -70,10 +71,17 @@ public class LevelCheckD implements LevelCheck {
         return false;
     }
 
+    /**
+     * Depth-First Search to see if each Gold and Pill is accessible to `PacActor`.
+     * @param currentModel Grid representation of the map
+     * @param root The starting point
+     * @return true if each Gold and Pill is accessible to `PacActor`, false otherwise
+     */
     private boolean DFS(Grid currentModel, Point root) {
         ArrayList<Point> visited = new ArrayList<>();
         Point curr = root;
         stack.add(root);
+        // Keep popping nodes off the stack until there are no more nodes to explore
         while (stack.size() > 0){
             curr = stack.remove(stack.size()-1);
             visited.add(curr);
@@ -81,18 +89,20 @@ public class LevelCheckD implements LevelCheck {
             int X = (int)curr.getX();
             int Y = (int)curr.getY();
             char currTile = currentModel.getTile(X, Y);
+            // Collect the 4 neighbouring `Points`
             ArrayList<Point> neighbours = new ArrayList<>();
             neighbours.add(new Point(X+1, Y));
             neighbours.add(new Point(X, Y+1));
             neighbours.add(new Point(X-1, Y));
             neighbours.add(new Point(X, Y-1));
             for (Point neighbour : neighbours){
-
+                // If the `neighbour` hasn't been visited yet and is within the bounds
                 if (!visited.contains(neighbour) && neighbour.getX() >= 0 && neighbour.getX() < 20 && neighbour.getY() >= 0 && neighbour.getY() < 11){
                     char tile = currentModel.getTile((int)neighbour.getX(), (int)neighbour.getY());
                     if (tile == 'b'){
                         continue;
                     }
+                    // Handle `Portals`
                     else if (tile == 'i' || tile == 'j' || tile == 'k' || tile == 'l'){
                         for(int y = 0; y < currentModel.getHeight(); y++){
                             for(int x = 0; x < currentModel.getWidth(); x++){
@@ -112,6 +122,7 @@ public class LevelCheckD implements LevelCheck {
                 }
             }
 
+            // Keep track of the number of `Gold` and `Pills` found. If there are none left, the check has passed
             if (currTile == 'd' || currTile == 'c'){
                 pillAndGoldLocations.remove(curr);
                 if (pillAndGoldLocations.size() == 0){

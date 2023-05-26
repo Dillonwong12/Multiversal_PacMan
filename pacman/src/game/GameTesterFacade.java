@@ -1,5 +1,12 @@
 package src.game;
 
+/**
+ * Facade to perform game tests when receiving a folder as command-line input.
+ *   1173104 Erick Wong (erickw@student.unimelb.edu.au)
+ *   1236449 Dillon Han Ren Wong (dillonhanren@student.unimelb.edu.au)
+ *   1272545 Jonathan Linardi (linardij@student.unimelb.edu.au)
+ */
+
 import src.editor.matachi.mapeditor.editor.*;
 
 import java.io.DataInputStream;
@@ -41,6 +48,7 @@ public class GameTesterFacade {
                 }
                 if (selectedFile != null) {
                     Controller.getInstance().loadSelectedFile(selectedFile);
+                    // Level check
                     if (!compositeABCDLevelCheck.checkLevel(Controller.getInstance().getModel(), selectedFile.getName())) {
                         System.out.println(selectedFile.getName() + " error: please refer to log file.");
                         break;
@@ -61,18 +69,16 @@ public class GameTesterFacade {
                         Socket socket = serverSocket.accept();
                         DataInputStream in = new DataInputStream(socket.getInputStream());
 
-                        // get from game socket
+                        // Get from game socket
                         won = in.readBoolean();
                         socket.close();
                         serverSocket.close();
-                        // if we win
+                        // If we win
                         if (won && i < compositeABGameCheck.getFormattedFiles().size()-1) {
                             i++;
                         }
                         else{
                             Controller.getInstance().resetEditor();
-                            System.out.println("Game over");
-
                             break;
                         }
                     } catch (IOException ex) {

@@ -4,6 +4,12 @@
 
 package src.game;
 
+/**
+ *   1173104 Erick Wong (erickw@student.unimelb.edu.au)
+ *   1236449 Dillon Han Ren Wong (dillonhanren@student.unimelb.edu.au)
+ *   1272545 Jonathan Linardi (linardij@student.unimelb.edu.au)
+ */
+
 import ch.aplu.jgamegrid.GGBackground;
 
 import java.awt.*;
@@ -13,6 +19,8 @@ public class Portal extends Item {
     public static final Color PORTAL_COLOR = Color.black;
     public static final String PORTAL_TYPE = "portal";
     public static final int PORTAL_POINTS = 0;
+
+    // The paired `Portal`
     private Portal pairPortal;
 
     public Portal (String sprite){
@@ -30,6 +38,10 @@ public class Portal extends Item {
         super.putItem(bg, point);
     }
 
+    /**
+     * Teleports a `character` to the `pairPortal`'s `Location`
+     * @param character
+     */
     public void teleport(Character character){
         character.setLocation(pairPortal.getLocation());
     }

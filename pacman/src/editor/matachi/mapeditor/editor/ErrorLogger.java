@@ -1,17 +1,17 @@
 package src.editor.matachi.mapeditor.editor;
 
-//  [Tue 09:00] Team 03
-//  1173104 Erick Wong (erickw@student.unimelb.edu.au)
-//  1236449 Dillon Han Ren Wong (dillonhanren@student.unimelb.edu.au)
-//  1272545 Jonathan Linardi (linardij@student.unimelb.edu.au)
+/**
+ * Singleton class for logging errors from failed `LevelCheck`s and `GameCheck`s.
+ *   1173104 Erick Wong (erickw@student.unimelb.edu.au)
+ *   1236449 Dillon Han Ren Wong (dillonhanren@student.unimelb.edu.au)
+ *   1272545 Jonathan Linardi (linardij@student.unimelb.edu.au)
+ */
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
-/**
- * Singleton Class for error logger, all error messages outputed to error logger.
- */
+
 public class ErrorLogger {
     private static ErrorLogger instance;
     private String logFilePath = "EditorErrorLog.txt";
@@ -26,8 +26,8 @@ public class ErrorLogger {
     }
 
     /**
-     * global access point for error logger
-     * @return Singleton Error logger
+     * Global access point for ErrorLogger
+     * @return Singleton ErrorLogger
      */
     public static ErrorLogger getInstance() {
         if (instance == null) {
@@ -37,8 +37,8 @@ public class ErrorLogger {
     }
 
     /**
-     * Function to write a given input string to the error logger followed by a null character.
-     * @param str String that should be outputted to error logger.
+     * Writes a given input string `str` to a file entitled `logFilePath`
+     * @param str String that should be logged
      */
     public void writeString(String str) {
         try {

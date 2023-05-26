@@ -3,6 +3,12 @@
  */
 package src.game;
 
+/**
+ *   1173104 Erick Wong (erickw@student.unimelb.edu.au)
+ *   1236449 Dillon Han Ren Wong (dillonhanren@student.unimelb.edu.au)
+ *   1272545 Jonathan Linardi (linardij@student.unimelb.edu.au)
+ */
+
 import ch.aplu.jgamegrid.Actor;
 import ch.aplu.jgamegrid.Location;
 
