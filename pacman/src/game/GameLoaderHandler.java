@@ -64,7 +64,7 @@ public class GameLoaderHandler {
                     }
                 }
                 else if (a == 9) {
-                    Portal portal = new Portal("data/j_portalYellowTile.png");
+                    Portal portal = new Portal("/Users/jonathanlinardi/Downloads/output-onlinepngtools (3).png");
                     game.getItemLocations().put(location, portal);
                     if (yellowPortal == null){
                         yellowPortal = portal;
