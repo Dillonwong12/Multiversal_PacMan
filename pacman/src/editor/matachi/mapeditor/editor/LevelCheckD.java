@@ -1,14 +1,29 @@
 package src.editor.matachi.mapeditor.editor;
 
+//  [Tue 09:00] Team 03
+//  1173104 Erick Wong (erickw@student.unimelb.edu.au)
+//  1236449 Dillon Han Ren Wong (dillonhanren@student.unimelb.edu.au)
+//  1272545 Jonathan Linardi (linardij@student.unimelb.edu.au)
+
 import src.editor.matachi.mapeditor.grid.Grid;
 
 import java.util.ArrayList;
 import java.awt.Point;
 
-// Check that items are accessible relative to pacman starting location
+/**
+ * Singular level check class which implements the LevelCheck Interface, checks whether a given map passes Level Check D
+ * Level Check D: Check that items are accessible relative to pacman starting location.
+ */
 public class LevelCheckD implements LevelCheck {
     ArrayList<Point> pillAndGoldLocations = new ArrayList<>();
     ArrayList<Point> stack = new ArrayList<>();
+
+    /**
+     * Checks that the all items are access
+     * @param currentModel
+     * @param fileName
+     * @return
+     */
     @Override
     public boolean checkLevel(Grid currentModel, String fileName) {
         int pacManX = 0;

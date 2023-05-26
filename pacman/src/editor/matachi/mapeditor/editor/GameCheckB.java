@@ -1,10 +1,26 @@
 package src.editor.matachi.mapeditor.editor;
 
+//  [Tue 09:00] Team 03
+//  1173104 Erick Wong (erickw@student.unimelb.edu.au)
+//  1236449 Dillon Han Ren Wong (dillonhanren@student.unimelb.edu.au)
+//  1272545 Jonathan Linardi (linardij@student.unimelb.edu.au)
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Singular game check B
+ * Game check B: checks that the sequence of maps are valid, only one map file
+ * with a particular number.
+ */
 public class GameCheckB implements GameCheck {
+    /**
+     * Function to check whether a game passes gameCheck B
+     * @param formattedFiles Arraylist of valid files in the folder
+     * @param directoryName Folder path
+     * @return returns true if all valid files passes check B and false if any doesn't.
+     */
     @Override
     public boolean checkGame(ArrayList<String> formattedFiles, String directoryName) {
         HashMap<String, ArrayList<String>> prefixesMap = new HashMap<>();

@@ -1,10 +1,25 @@
 package src.editor.matachi.mapeditor.editor;
 
+//  [Tue 09:00] Team 03
+//  1173104 Erick Wong (erickw@student.unimelb.edu.au)
+//  1236449 Dillon Han Ren Wong (dillonhanren@student.unimelb.edu.au)
+//  1272545 Jonathan Linardi (linardij@student.unimelb.edu.au)
+
 import src.editor.matachi.mapeditor.grid.Grid;
 
 import java.util.HashMap;
-public class LevelCheckB implements LevelCheck {
 
+/**
+ * Singular level check Class which implements LevelCheck to check  whether a given map is valid under level check B.
+ * Level Check B: exactly two tiles for each portal appearing on the map.
+ */
+public class LevelCheckB implements LevelCheck {
+    /**
+     * Method which checks whether a given map is valid under Level Check B
+     * @param currentModel current map
+     * @param fileName filename containing the current map
+     * @return true if for every portal color there are exactly 2 instaces.
+     */
     @Override
     public boolean checkLevel(Grid currentModel, String fileName) {
         // hashmap of portal colors and their locations

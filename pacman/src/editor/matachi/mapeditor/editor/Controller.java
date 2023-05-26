@@ -128,6 +128,7 @@ public class Controller  implements ActionListener, GUIInformation {
 
 		} else if (e.getActionCommand().equals("load")) {
 			loadFile();
+			// Perform level check on loaded file
 			levelCheckFunction.checkLevel(model, currentFile.getName());
 		} else if (e.getActionCommand().equals("update")) {
 			updateGrid(gridWith, gridHeight);
@@ -355,10 +356,14 @@ public class Controller  implements ActionListener, GUIInformation {
 		return selectedTile;
 	}
 
+	/**
+	 * Function to set the properties file path for the controller
+	 * @param propertiesPath properties file path
+	 */
 	public void setProperties(String propertiesPath) {
 		this.propertiesPath = propertiesPath;
 		this.properties = PropertiesLoader.loadPropertiesFile(propertiesPath);
-		//view.close();
+
 	}
 
 	public Properties getProperties() {
@@ -373,9 +378,16 @@ public class Controller  implements ActionListener, GUIInformation {
 		return model;
 	}
 
+	/**
+	 * Function to se the current file as null
+	 */
 	public void setCurrentFileNull(){
 		this.currentFile = null;
 	}
+
+	/**
+	 * Function empty and clear the editor
+	 */
 	public void resetEditor() {
 		Controller.instance = null;
 		updateGrid(this.gridWith, this.gridHeight);

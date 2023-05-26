@@ -24,10 +24,11 @@ public abstract class CompositeGameCheck implements GameCheck {
     }
 
     /**
-     * Function to check each Game Files with each checkGame
+     * Function to check each Game File with each checkGame.
+     * Sorts the game files if all files pass each game Check
      * @param gameFiles files in the game folder
      * @param directoryName folder name
-     * @return True if the folder passes each and every gameCheck.
+     * @return Returns true and sorts the File Array if the folder passes each and every gameCheck.
      */
     public boolean checkGame(ArrayList<String> gameFiles, String directoryName){
         extractFormattedFiles(gameFiles);
@@ -42,7 +43,7 @@ public abstract class CompositeGameCheck implements GameCheck {
 
     /**
      * Function to extract files where the length of the file name is > 5, has a digit as its first character,
-     * and ends with xml.
+     * and ends with xml, valid files.
      * @param gameFiles File name of the files in the folder.
      */
     private void extractFormattedFiles(ArrayList<String> gameFiles){
