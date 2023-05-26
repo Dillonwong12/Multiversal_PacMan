@@ -70,7 +70,8 @@ public class GameTesterFacade {
                         }
                         else{
                             Controller.getInstance().resetEditor();
-                            Controller.getInstance();
+                            System.out.println("Game over");
+
                             break;
                         }
                     } catch (IOException ex) {

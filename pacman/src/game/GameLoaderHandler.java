@@ -53,7 +53,8 @@ public class GameLoaderHandler {
                     game.getPillAndItemLocations().add(location);
                 }
                 else if (a == 8) {
-                    Portal portal = new Portal("data/i_portalWhiteTile.png");
+                    System.out.println("white portal");
+                    Portal portal = new Portal("pacman/sprites/resizedImages/i_portalWhiteTileResized.png");
                     game.getItemLocations().put(location, portal);
                     if (whitePortal == null){
                         whitePortal = portal;
@@ -64,7 +65,7 @@ public class GameLoaderHandler {
                     }
                 }
                 else if (a == 9) {
-                    Portal portal = new Portal("/Users/jonathanlinardi/Downloads/output-onlinepngtools (3).png");
+                    Portal portal = new Portal("pacman/sprites/resizedImages/j_portalYellowTileResized.png");
                     game.getItemLocations().put(location, portal);
                     if (yellowPortal == null){
                         yellowPortal = portal;
@@ -75,7 +76,7 @@ public class GameLoaderHandler {
                     }
                 }
                 else if (a == 10) {
-                    Portal portal = new Portal("data/k_portalDarkGoldTile.png");
+                    Portal portal = new Portal("pacman/sprites/resizedImages/k_portalDarkGoldTileResized.png");
                     game.getItemLocations().put(location, portal);
                     if (darkGoldPortal == null){
                         darkGoldPortal = portal;
@@ -86,7 +87,7 @@ public class GameLoaderHandler {
                     }
                 }
                 else if (a == 11) {
-                    Portal portal = new Portal("data/l_portalDarkGrayTile.png");
+                    Portal portal = new Portal("pacman/sprites/resizedImages/l_portalDarkGrayTileResized.png");
                     game.getItemLocations().put(location, portal);
                     if (darkGrayPortal == null){
                         darkGrayPortal = portal;

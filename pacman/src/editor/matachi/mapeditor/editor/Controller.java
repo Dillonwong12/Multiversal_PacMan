@@ -367,5 +367,6 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 	}
 	public void resetEditor() {
 		Controller.instance = null;
+		updateGrid(this.gridWith, this.gridHeight);
 	}
 }
