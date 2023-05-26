@@ -1,5 +1,10 @@
 package src.editor.matachi.mapeditor.editor;
 
+//  [Tue 09:00] Team 03
+//  1173104 Erick Wong (erickw@student.unimelb.edu.au)
+//  1236449 Dillon Han Ren Wong (dillonhanren@student.unimelb.edu.au)
+//  1272545 Jonathan Linardi (linardij@student.unimelb.edu.au)
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
@@ -37,7 +42,7 @@ import java.nio.file.Path;
  * @since v0.0.5
  * 
  */
-public class Controller extends SwingWorker<Void, Void> implements ActionListener, GUIInformation {
+public class Controller  implements ActionListener, GUIInformation {
 
 	/**
 	 * The model of the map editor.
@@ -57,7 +62,9 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 
 	private File currentFile = null;
 
-
+	/**
+	 * Attribute which stores the composite level check that we will perform on every map
+	 */
 	private CompositeLevelCheck levelCheckFunction = new CompositeABCDLevelCheck();
 	private Properties properties;
 
@@ -70,6 +77,7 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 
 
 	/**
+	 * Singleton constructor
 	 * Construct the controller.
 	 */
 	private Controller() {
@@ -79,6 +87,7 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 
 	/**
 	 * Returns the single instance of the Controller class.
+	 * Instantiates the controller if it has not been created
 	 */
 	public static Controller getInstance() {
 		if (instance == null) {
@@ -87,12 +96,6 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 		return instance;
 	}
 
-
-
-	@Override
-	protected Void doInBackground() throws Exception {
-		return null;
-	}
 
 	public void init(int width, int height) {
 		this.tiles = TileManager.getTilesFromFolder("pacman/data/");
@@ -129,6 +132,9 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 		} else if (e.getActionCommand().equals("update")) {
 			updateGrid(gridWith, gridHeight);
 		}else if (e.getActionCommand().equals("start_game")) {
+			/**
+			 * if start_game button is pressed
+			 */
 			if (currentFile != null && currentFile.exists() && currentFile.canRead()){
 				if (!levelCheckFunction.checkLevel(model, currentFile.getName())){
 					System.out.println(currentFile.getName() + " error: please refer to log file.");

@@ -47,7 +47,8 @@ public class GameTesterFacade {
                     }
 
                     String filePath = selectedFile.getPath();
-                    String classPath = "out:out/lib/jdom-1.1.3.jar:out/lib/JGameGrid.jar";
+                    String pathSeparator = System.getProperty("path.separator");
+                    String classPath = "out" + pathSeparator + "out/lib/jdom-1.1.3.jar" + pathSeparator + "out/lib/JGameGrid.jar";
                     String mainClass = "src.game.GameDriver";
 
                     ProcessBuilder process = new ProcessBuilder("java", "-cp", classPath, mainClass, Controller.getInstance().getPropertiesPath(), filePath, "true");
