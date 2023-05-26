@@ -131,11 +131,13 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 		}else if (e.getActionCommand().equals("start_game")) {
 			if (currentFile != null && currentFile.exists() && currentFile.canRead()){
 				if (!levelCheckFunction.checkLevel(model, currentFile.getName())){
-					System.out.println(currentFile.getName() + " error: please refer to EditorErrorLog.txt.");
+					System.out.println(currentFile.getName() + " error: please refer to log file.");
 					return;
 				}
+
 				String filePath = currentFile.getPath();
-				String classPath = "out:out/lib/jdom-1.1.3.jar:out/lib/JGameGrid.jar";
+				String pathSeparator = System.getProperty("path.separator");
+				String classPath = "out" + pathSeparator + "out/lib/jdom-1.1.3.jar" + pathSeparator + "out/lib/JGameGrid.jar";
 				String mainClass = "src.game.GameDriver";
 
 				ProcessBuilder process = new ProcessBuilder("java", "-cp", classPath, mainClass, propertiesPath, filePath,"false");
@@ -148,11 +150,14 @@ public class Controller extends SwingWorker<Void, Void> implements ActionListene
 					throw new RuntimeException(ex);
 				}
 
+				System.out.println("Bout to run process");
+				System.out.println("filepath is " + filePath);
+				System.out.println("properties path is " + propertiesPath);
+
 			}
 			else {
 				System.out.println("Only saved and loaded maps can be tested.");
 			}
-
 		}
 	}
 
