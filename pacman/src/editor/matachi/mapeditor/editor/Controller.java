@@ -18,7 +18,6 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-import org.jdom.JDOMException;
 import src.editor.matachi.mapeditor.grid.Camera;
 import src.editor.matachi.mapeditor.grid.Grid;
 import src.editor.matachi.mapeditor.grid.GridCamera;
@@ -36,7 +35,7 @@ import src.game.utility.PropertiesLoader;
 
 // import processbuilder
 import java.io.File;
-import java.nio.file.Path;
+
 /**
  * Controller of the application.
  * 
@@ -65,7 +64,6 @@ public class Controller  extends SwingWorker<Void, Void> implements ActionListen
 
 	private File currentFile = null;
 
-
 	// Attribute which stores the composite level check that we will perform on every map
 	private CompositeLevelCheck levelCheckFunction = new CompositeABCDLevelCheck();
 	private Properties properties;
@@ -76,29 +74,6 @@ public class Controller  extends SwingWorker<Void, Void> implements ActionListen
 	private static Controller instance = null;
 
 	private Game game = null;
-	private SwingWorker<Void, Void> gameWorker = new SwingWorker<Void, Void>() {
-		@Override
-		protected Void doInBackground() throws Exception {
-			System.out.println("Entering doInBackground in SwingWorker");
-			if (game != null) {
-				System.out.println("Game is not null");
-				game.getFrame().dispose();
-				game = null;
-				System.out.println("Game disposed");
-			} else {
-				System.out.println("Game is null");
-				String DEFAULT_PROPERTIES_PATH = "pacman/properties/test2.properties";
-				final Properties properties = PropertiesLoader.loadPropertiesFile(DEFAULT_PROPERTIES_PATH);
-				GameCallback gameCallback = new GameCallback();
-				File testFile = new File("pacman/testFolder/sample_map2.xml");
-				game = new Game(gameCallback, properties, testFile);
-
-				game.getFrame().dispose();
-
-			}
-			return null;
-		}
-	};
 
 	/**
 	 * Singleton constructor
@@ -162,10 +137,7 @@ public class Controller  extends SwingWorker<Void, Void> implements ActionListen
 		} else if (e.getActionCommand().equals("update")) {
 			updateGrid(gridWith, gridHeight);
 		}else if (e.getActionCommand().equals("start_game")) {
-
-			System.out.println("Executing SwingWorker");
-			gameWorker.execute();
-
+			startGame();
 		}
 	}
 
@@ -354,6 +326,35 @@ public class Controller  extends SwingWorker<Void, Void> implements ActionListen
 		catch (Exception e){
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Starts a game in Test Mode
+	 */
+	private void startGame(){
+		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+			@Override
+			public Void doInBackground() {
+				if (currentFile != null && currentFile.exists() && currentFile.canRead()){
+					if (!levelCheckFunction.checkLevel(model, currentFile.getName())){
+						return null;
+					}
+					try {
+						GameCallback callback = new GameCallback();
+						Game game = new Game(callback, properties, currentFile);
+					}
+					catch (Exception e){
+						e.printStackTrace();
+					}
+				}
+				else {
+					System.out.println("Only saved and loaded maps can be tested.");
+				}
+
+				return null;
+			}
+		};
+		worker.execute();
 	}
 
 	/**

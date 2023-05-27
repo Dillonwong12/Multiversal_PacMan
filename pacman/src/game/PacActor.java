@@ -27,6 +27,7 @@ public class PacActor extends Character implements GGKeyRepeatListener
   private int idSprite = 0;
   private int nbPills = 0;
   private int score = 0;
+  private int stepsAfterTeleport = 0;
   private ArrayList<Location> pillAndGoldLocations = new ArrayList<>();
   private boolean isAuto = false;
   private AutoPlayerBuilder autoPlayerBuilder = new AutoPlayerBuilder();
@@ -144,6 +145,14 @@ public class PacActor extends Character implements GGKeyRepeatListener
 
   public void setScore(int score){
     this.score = score;
+  }
+
+  public void setStepsAfterTeleport(int stepsAfterTeleport) {
+    this.stepsAfterTeleport = stepsAfterTeleport;
+  }
+
+  public int getStepsAfterTeleport() {
+    return stepsAfterTeleport;
   }
 
   public void setPillAndGoldLocations(ArrayList<Location> itemLocations){

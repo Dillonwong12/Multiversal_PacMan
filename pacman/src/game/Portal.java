@@ -58,6 +58,10 @@ public class Portal extends Item {
         return PORTAL_POINTS;
     }
 
+    public Portal getPairPortal() {
+        return pairPortal;
+    }
+
     public void setPairPortal(Portal portal){
         this.pairPortal = portal;
     }

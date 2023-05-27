@@ -27,8 +27,11 @@ public class GameTesterFacade  {
     public GameTesterFacade(){
     }
 
-
-
+    /**
+     * Performs a game test
+     * @param args The command-line arguments
+     * @throws Exception
+     */
     public void testGame(String[] args) throws Exception {
         ArrayList<String> gameFiles = new ArrayList<>();
         CompositeGameCheck compositeABGameCheck = new CompositeABGameCheck();
@@ -45,6 +48,7 @@ public class GameTesterFacade  {
                 return;
             }
 
+            // Iterate through the game files
             int i = 0;
             while (i < compositeABGameCheck.getFormattedFiles().size()) {
                 File selectedFile = null;
@@ -60,10 +64,10 @@ public class GameTesterFacade  {
 
                     // Level check
                     if (!compositeABCDLevelCheck.checkLevel(Controller.getInstance().getModel(), selectedFile.getName())) {
-                        System.out.println(selectedFile.getName() + " error: please refer to log file.");
                         break;
                     }
 
+                    // Run the game
                     final File finalSelectedFile = selectedFile;
                     Game gameBuffer;
                     SwingWorker<Boolean, Void> gameWorker = new SwingWorker<Boolean, Void>() {
@@ -83,11 +87,9 @@ public class GameTesterFacade  {
 
                     // If we win
                     if (gameResult && i < compositeABGameCheck.getFormattedFiles().size()-1) {
-                        //game.getFrame().dispose();
                         i++;
                     }
                     else{
-                        //game.getFrame().dispose();
                         Controller.getInstance().resetEditor();
                         break;
                     }
