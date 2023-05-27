@@ -123,7 +123,6 @@ public class Game extends GameGrid implements GGExitListener
       // pause so no error
       delay(1000);
       this.getFrame().dispose();
-//      this.getFrame().dispose();
     } else if (hasPacmanEatAllPills) {
       bg.setPaintColor(Color.yellow);
       title = "YOU WIN";
@@ -132,7 +131,6 @@ public class Game extends GameGrid implements GGExitListener
     }
     setTitle(title);
     gameCallback.endOfGame(title);
-    System.out.println("pause");
     doPause();
   }
   public void stopGame() {

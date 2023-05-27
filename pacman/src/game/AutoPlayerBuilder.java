@@ -22,7 +22,7 @@ public class AutoPlayerBuilder {
         // Set the strategy here. This will depend on different contexts in the future.
         AutoPlayer autoPlayer = new BaseAutoPlayerStrategy(this, targetLocation);
         setStrategy((AutoPlayerStrategy) autoPlayer);
-        ArrayList<Location> neighbours = autoPlayer.getNeighbourhood(pacActor);
+        ArrayList<Location> neighbours = autoPlayer.getNeighbourhood(pacActor, pacActor.getLocation());
 
         // Wrap the base `AutoPlayer`
         for (Location location : neighbours) {

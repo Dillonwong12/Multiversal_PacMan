@@ -8,6 +8,7 @@ package src.game;
  */
 
 import ch.aplu.jgamegrid.Location;
+import src.editor.matachi.mapeditor.grid.Grid;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ public class BaseAutoPlayerStrategy implements AutoPlayerStrategy{
     // Weights for `Pill` and `Gold`. These may be adjusted in the future
     private final int PILL_WEIGHT = 1;
     private final int GOLD_WEIGHT = 1;
+
+    private final int STEPS_AFTER_TELEPORT = 15;
 
     private AutoPlayerBuilder builder;
     private Location targetLocation = null;
@@ -33,17 +36,12 @@ public class BaseAutoPlayerStrategy implements AutoPlayerStrategy{
      * @return
      */
     public Location moveInAutoMode(PacActor pacActor) {
-        ArrayList<Location> neighbourhood = getNeighbourhood(pacActor);
+        ArrayList<Location> neighbourhood = getNeighbourhood(pacActor, pacActor.getLocation());
         // Set the `targetLocation` if it hasn't already been set
-        if (targetLocation != null){
-            if (pacActor.getLocation().equals(targetLocation)){
-                builder.removeTargetLocation();
-            }
-        }
-        else {
-            targetLocation = closestPillLocation(pacActor.getGame().getPillAndItemLocations(), pacActor.getLocation());
-            builder.setTargetLocation(targetLocation);
-        }
+
+        targetLocation = firstPillDFS(pacActor);
+        builder.setTargetLocation(targetLocation);
+
         // Rearrange the moves
         ArrayList<Location> candidates = getNextMoves(pacActor, targetLocation);
         neighbourhood.removeAll(candidates);
@@ -62,6 +60,11 @@ public class BaseAutoPlayerStrategy implements AutoPlayerStrategy{
                 next = candidates.get(i);
             }
         }
+        Color nextColor = pacActor.getBackground().getColor(next);
+        // Update the number of steps `pacActor` has taken after teleporting
+        if (nextColor.equals(Portal.PORTAL_COLOR) || pacActor.getStepsAfterTeleport() > 0){
+            pacActor.setStepsAfterTeleport(pacActor.getStepsAfterTeleport()+1);
+        }
 
         return next;
     }
@@ -77,7 +80,7 @@ public class BaseAutoPlayerStrategy implements AutoPlayerStrategy{
         double shortestDistance = Double.MAX_VALUE;
 
         // Check Each Neighbor Location
-        for (Location neighbor : getNeighbourhood(pacActor)) {
+        for (Location neighbor : getNeighbourhood(pacActor, pacActor.getLocation())) {
 
             double distance = neighbor.getDistanceTo(targetLocation);
 
@@ -103,5 +106,46 @@ public class BaseAutoPlayerStrategy implements AutoPlayerStrategy{
         HashMap<java.lang.Character, Integer> tilesMap = getTilesMap();
         tilesMap.put('c', tilesMap.getOrDefault('c', 0)+PILL_WEIGHT);
         tilesMap.put('d', tilesMap.getOrDefault('d', 0)+GOLD_WEIGHT);
+    }
+
+    /**
+     * Depth-First Search to return the first found `Pill` or `Gold`  pr 'Portal' Location
+     * @param pacActor PacMan
+     * @return Location of the first found `Pill` or `Gold`
+     */
+    private Location firstPillDFS(PacActor pacActor) {
+        ArrayList<Location> visited = new ArrayList<>();
+        ArrayList<Location> stack = new ArrayList<>();
+        Location curr = pacActor.getLocation();
+
+        // Reset the number of steps `pacActor` has taken after teleporting
+        if (pacActor.getStepsAfterTeleport() > STEPS_AFTER_TELEPORT){
+            pacActor.setStepsAfterTeleport(0);
+        }
+
+        stack.add(curr);
+        // Keep popping nodes off the stack until there are no more nodes to explore
+        while (stack.size() > 0){
+            curr = stack.remove(stack.size()-1);
+            visited.add(curr);
+
+            // Collect the 4 neighbouring `Points`
+            ArrayList<Location> neighbours = getNeighbourhood(pacActor, curr);
+
+            for (Location neighbour : neighbours){
+                // If the `neighbour` hasn't been visited yet and is within the bounds
+                if (!visited.contains(neighbour)){
+
+                    Color color = pacActor.getBackground().getColor(neighbour);
+                    if (color.equals(Pill.PILL_COLOR) || color.equals(Gold.GOLD_COLOR)
+                            || (color.equals(Portal.PORTAL_COLOR) && pacActor.getStepsAfterTeleport() == 0)){
+                        return neighbour;
+                    }
+                    stack.add(neighbour);
+
+                }
+            }
+        }
+        return curr;
     }
 }

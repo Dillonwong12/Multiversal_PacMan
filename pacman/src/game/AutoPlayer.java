@@ -29,9 +29,9 @@ public interface AutoPlayer {
      * Gets all the 4 neighbouring `Location`s iteratively.
      * @return An ArrayList of all the valid neighbours
      */
-    default ArrayList<Location> getNeighbourhood(PacActor pacActor) {
-        int x = pacActor.getX();
-        int y = pacActor.getY();
+    default ArrayList<Location> getNeighbourhood(PacActor pacActor, Location loc) {
+        int x = loc.getX();
+        int y = loc.getY();
         ArrayList<Location> neighbourhood = new ArrayList<>();
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
@@ -39,27 +39,9 @@ public interface AutoPlayer {
                 if (!pacActor.canMove(location) || Math.abs(i) == Math.abs(j)){
                     continue;
                 }
-
                 neighbourhood.add(location);
             }
         }
         return neighbourhood;
-    }
-
-    /**
-     * Finds and returns the closest `Pill` or `Gold` `Location`.
-     * @return currentLocation The `Location` closest to a `Pill` or `Gold`
-     */
-    default Location closestPillLocation(ArrayList<Location> pillAndGoldLocations, Location init) {
-        int currentDistance = 1000;
-        Location currentLocation = null;
-        for (Location location: pillAndGoldLocations) {
-            int distanceToPill = location.getDistanceTo(init);
-            if (distanceToPill < currentDistance) {
-                currentLocation = location;
-                currentDistance = distanceToPill;
-            }
-        }
-        return currentLocation;
     }
 }
