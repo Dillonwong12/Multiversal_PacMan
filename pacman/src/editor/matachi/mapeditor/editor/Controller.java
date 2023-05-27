@@ -18,6 +18,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import org.jdom.JDOMException;
 import src.editor.matachi.mapeditor.grid.Camera;
 import src.editor.matachi.mapeditor.grid.Grid;
 import src.editor.matachi.mapeditor.grid.GridCamera;
@@ -44,7 +45,7 @@ import java.nio.file.Path;
  * @since v0.0.5
  * 
  */
-public class Controller  implements ActionListener, GUIInformation {
+public class Controller  extends SwingWorker<Void, Void> implements ActionListener, GUIInformation {
 
 	/**
 	 * The model of the map editor.
@@ -74,6 +75,30 @@ public class Controller  implements ActionListener, GUIInformation {
 	// Controller is a Singleton
 	private static Controller instance = null;
 
+	private Game game = null;
+	private SwingWorker<Void, Void> gameWorker = new SwingWorker<Void, Void>() {
+		@Override
+		protected Void doInBackground() throws Exception {
+			System.out.println("Entering doInBackground in SwingWorker");
+			if (game != null) {
+				System.out.println("Game is not null");
+				game.getFrame().dispose();
+				game = null;
+				System.out.println("Game disposed");
+			} else {
+				System.out.println("Game is null");
+				String DEFAULT_PROPERTIES_PATH = "pacman/properties/test2.properties";
+				final Properties properties = PropertiesLoader.loadPropertiesFile(DEFAULT_PROPERTIES_PATH);
+				GameCallback gameCallback = new GameCallback();
+				File testFile = new File("pacman/testFolder/sample_map2.xml");
+				game = new Game(gameCallback, properties, testFile);
+
+				game.getFrame().dispose();
+
+			}
+			return null;
+		}
+	};
 
 	/**
 	 * Singleton constructor
@@ -81,6 +106,11 @@ public class Controller  implements ActionListener, GUIInformation {
 	private Controller() {
 		init(Constants.MAP_WIDTH, Constants.MAP_HEIGHT);
 
+	}
+
+	@Override
+	protected Void doInBackground() throws Exception {
+		return null;
 	}
 
 	/**
@@ -107,6 +137,7 @@ public class Controller  implements ActionListener, GUIInformation {
 		this.view = new View(this, camera, grid, tiles);
 	}
 
+
 	/**
 	 * Different commands that come from the `View`.
 	 */
@@ -131,31 +162,10 @@ public class Controller  implements ActionListener, GUIInformation {
 		} else if (e.getActionCommand().equals("update")) {
 			updateGrid(gridWith, gridHeight);
 		}else if (e.getActionCommand().equals("start_game")) {
-			// if start_game button is pressed
-			if (currentFile != null && currentFile.exists() && currentFile.canRead()){
-				if (!levelCheckFunction.checkLevel(model, currentFile.getName())){
-					System.out.println(currentFile.getName() + " error: please refer to log file.");
-					return;
-				}
-				// Run Test Mode for a file if it passes all `LevelCheck`s and has been saved or loaded
-				String filePath = currentFile.getPath();
-				String pathSeparator = System.getProperty("path.separator");
-				String classPath = "out" + pathSeparator + "out/lib/jdom-1.1.3.jar" + pathSeparator + "out/lib/JGameGrid.jar";
-				String mainClass = "src.game.GameDriver";
 
-				ProcessBuilder process = new ProcessBuilder("java", "-cp", classPath, mainClass, propertiesPath, filePath,"false");
-				process.redirectOutput(ProcessBuilder.Redirect.INHERIT);
-				process.redirectError(ProcessBuilder.Redirect.INHERIT);
+			System.out.println("Executing SwingWorker");
+			gameWorker.execute();
 
-				try {
-					Process p = process.start();
-				} catch (IOException ex) {
-					throw new RuntimeException(ex);
-				}
-			}
-			else {
-				System.out.println("Only saved and loaded maps can be tested.");
-			}
 		}
 	}
 

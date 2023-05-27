@@ -42,8 +42,8 @@ public class Game extends GameGrid implements GGExitListener
   private String gameVersion;
   private GameLoaderHandler gameLoaderHandler;
   private boolean isGameWon = false;
+  private boolean gameRunning = true;
   public Game(GameCallback gameCallback, Properties properties, File mapXML) throws IOException, JDOMException {
-
 
     // Setup game
     super(NB_HORZ_CELLS, NB_VERT_CELLS, 20, false);
@@ -102,11 +102,13 @@ public class Game extends GameGrid implements GGExitListener
         }
       }
       hasPacmanEatAllPills = pacActor.getScore() >= maxScore;
+
       delay(10);
-    } while(!hasPacmanBeenHit && !hasPacmanEatAllPills);
+    } while(!hasPacmanBeenHit && !hasPacmanEatAllPills && gameRunning);
     delay(120);
 
     Location loc = pacActor.getLocation();
+
     setMonstersStopMove(true);
     pacActor.removeSelf();
 
@@ -115,16 +117,34 @@ public class Game extends GameGrid implements GGExitListener
     if (hasPacmanBeenHit) {
       bg.setPaintColor(Color.red);
       title = "GAME OVER";
+
+
       addActor(new Actor("sprites/explosion3.gif"), loc);
+      // pause so no error
+      delay(1000);
+      this.getFrame().dispose();
+//      this.getFrame().dispose();
     } else if (hasPacmanEatAllPills) {
       bg.setPaintColor(Color.yellow);
       title = "YOU WIN";
       this.setGameWon(true);
+      this.getFrame().dispose();
     }
     setTitle(title);
     gameCallback.endOfGame(title);
-
+    System.out.println("pause");
     doPause();
+  }
+  public void stopGame() {
+    this.gameRunning = false;
+    doPause();
+    SwingUtilities.invokeLater(new Runnable() {
+      @Override
+      public void run() {
+        getFrame().dispose();
+      }
+    });
+
   }
   // For Default Game
   public Game(GameCallback gameCallback, Properties properties) throws IOException, JDOMException {
@@ -158,6 +178,7 @@ public class Game extends GameGrid implements GGExitListener
       maxScore += entry.getValue().getPoints();
     }
   }
+
 
   /**
    * Removes an Item when PacActor eats it. Adjusts PacActor's `score` and applies itemEffect()s if necessary.
@@ -244,4 +265,6 @@ public class Game extends GameGrid implements GGExitListener
     System.out.println("Game is exiting");
     return false;
   }
+
+
 }
