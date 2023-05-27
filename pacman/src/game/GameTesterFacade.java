@@ -83,6 +83,7 @@ public class GameTesterFacade  {
                     };
 
                     gameWorker.execute();
+                    // get result of the game
                     gameResult = gameWorker.get();
 
                     // If we win
